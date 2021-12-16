@@ -3,10 +3,6 @@ Sub macrosOn()
 '///Turns on Macros////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Range("AA1").Value = "On"
-    Range("AA2").Value = "On"
-    Range("AA3").Value = "On"
-    Range("AA4").Value = "On"
-    Range("AA5").Value = "On"
     
 End Sub
 
@@ -16,9 +12,5 @@ Sub macrosOff()
 '///Turns off Macros///////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Range("AA1").Value = "Off"
-    Range("AA2").Value = "Off"
-    Range("AA3").Value = "Off"
-    Range("AA4").Value = "Off"
-    Range("AA5").Value = "Off"
     
 End Sub

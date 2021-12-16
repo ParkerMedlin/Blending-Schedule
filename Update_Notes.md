@@ -1,5 +1,10 @@
 # Update Notes
 
+### 12-16-2021
+ - removed the following functions because they are not needed in the blending schedule:
+	 - `blendshtGen1wk`, `blendshtGen2wk`, `blendshtGen3wk`, `hotRoomSheet`
+ - changed macrosOn/Off so that it only does cell AA1. Changed all the sheet code so that the selection change based macros only trigger based on value of cell AA1.
+
 ### 12-15-2021
  - Updated prod#mergeSheets query to trim rows before preview per code from JRD
 

@@ -1,20 +1,5 @@
 Private Sub Worksheet_SelectionChange(ByVal target As Range)
 
-'Assigns the blend sheet gen macros to the shortage cells
-    If InStr(1, (Range("AA1").Value), "On") > 0 Then
-        If Selection.Count = 1 Then
-            If Not Intersect(target, Range("$Q:$Q")) Is Nothing Then
-                Call blndShtGen1wk
-                End If
-            If Not Intersect(target, Range("$R:R")) Is Nothing Then
-                Call blndShtGen2wk
-                End If
-            If Not Intersect(target, Range("$S:S")) Is Nothing Then
-                Call blndShtGen3wk
-            End If
-        End If
-     End If
-'--------------------------------------------------------------------
 
 'A:A triggers lot Number lookup macro
     If InStr(1, (Range("AA1").Value), "On") > 0 Then
@@ -26,7 +11,7 @@ Private Sub Worksheet_SelectionChange(ByVal target As Range)
     End If
     
 'B:B triggers blend data future run lookup macro
-    If InStr(1, (Range("AA2").Value), "On") > 0 Then
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then
         If Selection.Count = 1 Then
             If Not Intersect(target, Range("$B:$B")) Is Nothing Then
                 Call lookup_runs
@@ -35,7 +20,7 @@ Private Sub Worksheet_SelectionChange(ByVal target As Range)
     End If
 
 'C:C triggers count history lookup macro
-    If InStr(1, (Range("AA4").Value), "On") > 0 Then
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then
         If Selection.Count = 1 Then
             If Not Intersect(target, Range("$C:$C")) Is Nothing Then
                 Call lookup_countHistory
@@ -44,7 +29,7 @@ Private Sub Worksheet_SelectionChange(ByVal target As Range)
     End If
     
 'D:D triggers BI_BR transaction lookup macro
-    If InStr(1, (Range("AA4").Value), "On") > 0 Then
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then
         If Selection.Count = 1 Then
             If Not Intersect(target, Range("$D:$D")) Is Nothing Then
                 Call lookup_BI_BR_transactions
@@ -53,7 +38,7 @@ Private Sub Worksheet_SelectionChange(ByVal target As Range)
     End If
    
 'U:U Calls Lot Number Generator macro
-    If InStr(1, (Range("AA4").Value), "On") > 0 Then
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then
         If Selection.Count = 1 Then
             If Not Intersect(target, Range("$U:$U")) Is Nothing Then
                 Call LotNumGen
