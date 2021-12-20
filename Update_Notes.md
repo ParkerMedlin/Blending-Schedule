@@ -1,5 +1,24 @@
 # Update Notes
 
+### 12-20-2021
+
+ - removed the following queries:
+	 - issueSheet_table
+	 - bom_blend_query and table
+	 - updated naming conventions for all other queries and tables then went through. Updated all the macros so they now work with the new names. 
+	 - updated the Hx/Dm query so that it keeps the columns i want rather than removing the ones I don't (per <a href="https://www.youtube.com/watch?v=1wdNNgSAZ7k">this video</a>.
+ - not gonna keep fooling with it now but noting for later:
+	 - the url for querying the prod schedule thru sharepoint is as follows:
+	```
+	let
+		Source = SharePoint.Files("https://adminkinpak.sharepoint.com/sites/PDTN/", [ApiVersion = 15])
+	in
+		Source
+	```
+
+ - Removed the AllCounts clearnreturn subroutine as well as the AllCounts logging sub and the IssueSheet clearnreturn selection statements for sheet code
+ - Updated the LotNumGen sub so that it now uses an array instead of copypasta. Also built in logic to max at 5100 for hx and 2925 for dm
+
 ### 12-16-2021
  - removed the following functions because they are not needed in the blending schedule:
 	 - `blendshtGen1wk`, `blendshtGen2wk`, `blendshtGen3wk`, `hotRoomSheet`

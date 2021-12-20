@@ -10,11 +10,6 @@ If Selection.Count = 1 Then
     If Not Intersect(target, Range("$M$1")) Is Nothing Then
         Call clearAndReturn_BlendThese
     End If
-'Clear filter and return to IssueSheetTable sheet
-    If Not Intersect(target, Range("$N$1")) Is Nothing Then
-        Call clearAndReturn_IssueSheetTable
-    End If
-
 
 End If
 

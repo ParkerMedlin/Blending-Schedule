@@ -11,11 +11,11 @@ Sub potatoPrinterCheckOut()
     Call macrosOff
 
 'select visible data body
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.SpecialCells(xlCellTypeVisible).Select
-    ActiveSheet.ListObjects("CheckOutCounts_query").DataBodyRange.Select
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").DataBodyRange.Select
     
 'set row height
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.RowHeight = 32
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.RowHeight = 32
     
 'Insert row, write in reason for counting
     Rows("1:1").Select
@@ -68,7 +68,7 @@ Sub potatoPrinterCheckOut()
 'show rows again and change row height back
     Range("A:D,G:I,L:L,N:AA").Select
     Selection.EntireColumn.Hidden = False
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.RowHeight = 21
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.RowHeight = 21
     Range("A1").Select
     
 'turn on macros
@@ -248,14 +248,14 @@ Sub potatoPrinterChemstoCheck()
     Selection.EntireColumn.Hidden = True
     
 'select visible data body
-    ActiveSheet.ListObjects("bom_ChemsToCheck_query").Range.SpecialCells(xlCellTypeVisible).Select
-    ActiveSheet.ListObjects("bom_ChemsToCheck_query").DataBodyRange.Select
+    ActiveSheet.ListObjects("pickSheet_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("pickSheet_TABLE").DataBodyRange.Select
     
 'set row height
-    ActiveSheet.ListObjects("bom_ChemsToCheck_query").Range.RowHeight = 32
+    ActiveSheet.ListObjects("pickSheet_TABLE").Range.RowHeight = 32
     
 'remove duplicates
-    ActiveSheet.Range("bom_ChemsToCheck_query[#All]").RemoveDuplicates Columns:=3 _
+    ActiveSheet.Range("pickSheet_TABLE[#All]").RemoveDuplicates Columns:=3 _
         , Header:=xlYes
     
 'Insert row, write in Count and Now()
@@ -290,7 +290,7 @@ Sub potatoPrinterChemstoCheck()
 'show rows again and change row height back
     Range("A:B").Select
     Selection.EntireColumn.Hidden = False
-    ActiveSheet.ListObjects("bom_ChemsToCheck_query").Range.RowHeight = 21
+    ActiveSheet.ListObjects("pickSheet_TABLE").Range.RowHeight = 21
     Range("A1").Select
     
 'refresh to restore order
@@ -307,10 +307,10 @@ Sub BlendTheseCounts()
     Call macrosOff
     
 'Filter for items that have not been checked since last change in inventory
-    ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.AutoFilter Field _
+    ActiveSheet.ListObjects("blendThese_TABLE").Range.AutoFilter Field _
         :=9, Criteria1:=RGB(146, 208, 80), Operator:=xlFilterCellColor
     
-        ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.RowHeight = 32
+        ActiveSheet.ListObjects("blendThese_TABLE").Range.RowHeight = 32
 
 'Hide unneccessary columns
     Columns("A:D").Select
@@ -328,8 +328,8 @@ Sub BlendTheseCounts()
 
     
 'select visible data body
-    ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.SpecialCells(xlCellTypeVisible).Select
-    ActiveSheet.ListObjects("timeTable_BlendThese_query").DataBodyRange.Select
+    ActiveSheet.ListObjects("blendThese_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("blendThese_TABLE").DataBodyRange.Select
     
 'print selection
     copyNumber = InputBox("Number of Printed Copies")
@@ -339,8 +339,8 @@ Sub BlendTheseCounts()
     End If
     
 'clear color filter, reset row height, then unhide the columns
-    ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.AutoFilter Field:=9
-    ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.RowHeight = 15
+    ActiveSheet.ListObjects("blendThese_TABLE").Range.AutoFilter Field:=9
+    ActiveSheet.ListObjects("blendThese_TABLE").Range.RowHeight = 15
     Columns("A:D").Select
     Selection.EntireColumn.Hidden = False
     Columns("H:AA").Select
@@ -351,3 +351,5 @@ Sub BlendTheseCounts()
     Selection.EntireColumn.Hidden = True
     
 End Sub
+
+

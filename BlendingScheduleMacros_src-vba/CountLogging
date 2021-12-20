@@ -6,27 +6,27 @@ Sub LogCheckOutCounts()
     Call macrosOff
 
 'Clear all the filters
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=1
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=2
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=3
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=4
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=5
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=6
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=7
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=8
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=9
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=10
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=11
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=12
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=13
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=14
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=15
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=16
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=17
-    ActiveSheet.ListObjects("CheckOutCounts_query").Range.AutoFilter Field:=18
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=1
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=2
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=3
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=4
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=5
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=6
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=7
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=8
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=9
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=10
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=11
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=12
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=13
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=14
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=15
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=16
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=17
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=18
 
 'Select only the visible cells in a filtered table
-    ActiveSheet.ListObjects("CheckOutCounts_query").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
 
 'Get the rowcount and insert correct num of rows
     Dim RowCount As Integer
@@ -36,7 +36,7 @@ Sub LogCheckOutCounts()
     Sheets("CheckOutCounts").Select
 
 'Copy and paste active data body
-    ActiveSheet.ListObjects("CheckOutCounts_query").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("checkOutCounts_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
     Selection.Copy
     Sheets("CountLog").Select
     Range("A3").Select
@@ -69,55 +69,6 @@ Sub LogCheckOutCounts()
 
 'Turn Macros back on
     Sheets("CheckOutCounts").Select
-    Call macrosOn
-
-End Sub
-Sub LogAllCounts()
-'///Assigned to the blue arrow on the CheckOutCounts sheet/////////////////////////////////////////////////////////////////
-'///Copies active data body from CheckOutCounts and inserts copied cells underneath headers on CHECKOUTdiff.log sheet//////
-
-'Turn off date logger to prevent fuckery
-    Call macrosOff
-
-'Select only the visible cells in a filtered table
-    ActiveSheet.ListObjects("AllCounts_query").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
-
-'Get the rowcount and insert correct num of rows
-    Dim RowCount As Integer
-    RowCount = Selection.Rows.Count
-    Sheets("AllCounts").Select
-    Range("A2").EntireRow.Offset(1).Resize(RowCount).Insert Shift:=xlDown
-    Sheets("MasterCounts").Select
-
-'Copy and paste active data body
-    ActiveSheet.ListObjects("AllCounts_query").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
-    Selection.Copy
-    Sheets("CountLog").Select
-    Range("A3").Select
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-        :=False, Transpose:=False
-    
-'bottom border of pasted selection
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-
-'Timestamp on CountsLog
-    Range("P3").Value = Now()
-
-'Top border for timestamp cell
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-
-'Turn date logger back on
-    Sheets("AllCounts").Select
     Call macrosOn
 
 End Sub

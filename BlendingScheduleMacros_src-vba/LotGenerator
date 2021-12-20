@@ -1,0 +1,36 @@
+Sub LotNumGen()
+'///Linked to T:T on BlendThese////////////////////////////////////////////////////////////////////////////////////////////
+'///Opens Lot Number Generator.xlsx and fills in the blend desc plus qty///////////////////////////////////////////////////
+
+'Set the way back to the current workbook
+    Dim src As String
+    src = ActiveWorkbook.Name
+
+'Array variable for the blend information
+    Dim blendInfo(2) As Variant
+    
+'Copy blend qty
+    blendInfo(0) = ActiveCell.Offset(0, -2)
+    blendInfo(1) = ActiveCell.Offset(0, -15)
+    
+'Max out at 2925 if drums, 2800 if totes, 5100 if horix.
+    Select Case ActiveCell.Offset(0, -6).Value
+    Case "Hx"
+        If blendInfo(0) > 5100 Then
+        blendInfo(0) = 5100
+        End If
+    Case "Dm"
+        If blendInfo(0) > 2925 Then
+        blendInfo(0) = 2925
+        End If
+    End Select
+    
+'Get filepath of Blenging Lont Ntumbner Grenerartror dot xlsx
+    Workbooks.Open "C:\OD\Kinpak, Inc\Blending - Documents\01 Spreadsheet Tools\Blending Lot Number Generator\LotNumGenerator-Prod\Blending Lot Number Generator"
+    Sheets(1).Activate
+    
+'Paste the blend qty
+    Range("D2").Value = blendInfo(0)
+    Range("B2").Value = blendInfo(1)
+    
+End Sub
