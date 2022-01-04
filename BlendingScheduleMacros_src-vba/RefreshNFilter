@@ -7,36 +7,37 @@ Sub refreshAndFilter()
     
     If uInput = vbYes Then
 
-'Deactivate Blend These selection-based Sheet Code functions
+        'Deactivate Blend These selection-based Sheet Code functions
         Call macrosOff
-    
-'Deactivate CheckOutCounts date logger function
+        
+        'Deactivate CheckOutCounts date logger function
         Sheets("CheckOutCounts").Select
         Call macrosOff
     
-'Refresh All
+        'Refresh All
+        Application.Calculation = xlCalculationManual
         ActiveWorkbook.RefreshAll
     
-'Auto size CheckOutCounts columns
+        'Auto size CheckOutCounts columns
         Columns("E:U").Select
         Columns("E:U").EntireColumn.AutoFit
     
-'Reactivate CheckOutCounts date logger function
+        'Reactivate CheckOutCounts date logger function
         Call macrosOn
         
-'Reactivate Blend These selection-based sheet code functions
+        'Reactivate Blend These selection-based sheet code functions
         Sheets("BlendThese").Select
         Columns("P").ColumnWidth = 3
         Call macrosOn
-   
         
-'Re-filter chemShortages
+        'Re-filter chemShortages
         Sheets("ChemShortages").Select
-        ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=6
         ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=6, _
         Criteria1:="<0", Operator:=xlAnd
         
-     Else
+        Application.Calculation = xlCalculationAutomatic
+        
+    Else
         MsgBox "Refresh cancelled."
 
     End If
@@ -53,11 +54,12 @@ Sub refreshOH()
     
     If uInput2 = vbYes Then
     
-'turn off the macros
+    'turn off the macros and calculations
+    Application.Calculation = xlCalculationManual
     Sheets("CheckOutCounts").Select
     Call macrosOff
 
-'unhide blendqtyonhand and refresh and then rehide it
+    'unhide blendqtyonhand and refresh and then rehide it
     With ThisWorkbook
        Sheets("im.blendQty.onHand").Visible = True
        Sheets("im.blendQty.onHand").Select
@@ -67,17 +69,18 @@ Sub refreshOH()
     Sheets("im.blendQty.onHand").Visible = False
      
 
-'Refresh CheckOutCounts
+    'Refresh CheckOutCounts
     Sheets("CheckOutCounts").Select
     Range("B2").Select
     Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
         
-'Autofit columns
+    'Autofit columns
     Columns("A:L").Select
     Columns("A:L").EntireColumn.AutoFit
     
-'Re-enable date logger
+    'Re-enable date logger and calculations
     Call macrosOn
+    Application.Calculation = xlCalculationAutomatic
 
     Else
         MsgBox "Refresh cancelled."

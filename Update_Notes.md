@@ -1,11 +1,16 @@
 # Update Notes
 
+### 1-4-2022 
+
+ - Happy New Year! the Blend These table was broken this morning! opened up previous version and restored the query and then walked back through my steps i followed last week to make it more efficient. Not worth my time to dig deeper but I suspect that the reason it broke was because I removed the Table.Buffer step, which I now realize had a nested Table.Sort in it. So the table was all out of whack bc it wasn't being sorted correctly anymore. That has been fixed.  
+
 ### 12-20-2021
 
  - removed the following queries:
 	 - issueSheet_table
 	 - bom_blend_query and table
 	 - updated naming conventions for all other queries and tables then went through. Updated all the macros so they now work with the new names. 
+	 - massive cleanup of the blendThese query as well
 	 - updated the Hx/Dm query so that it keeps the columns i want rather than removing the ones I don't (per <a href="https://www.youtube.com/watch?v=1wdNNgSAZ7k">this video</a>.
  - not gonna keep fooling with it now but noting for later:
 	 - the url for querying the prod schedule thru sharepoint is as follows:

@@ -6,13 +6,12 @@ Sub LotNumGen()
     Dim src As String
     src = ActiveWorkbook.Name
 
-Call macrosOff
-
+'Array variable for the blend information
+    Dim blendInfo(2) As Variant
+    
 'Copy blend qty
     ActiveCell.Offset(0, -2).Select
     Selection.Copy
-    
-Call macrosOn
 
 'Get filepath of Blenging Lont Ntumbner Grenerartror dot xlsx
     Dim path As String

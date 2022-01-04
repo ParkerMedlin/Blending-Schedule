@@ -32,8 +32,8 @@ Sub refreshAndFilter()
         
 'Re-filter chemShortages
         Sheets("ChemShortages").Select
-        ActiveSheet.ListObjects("bom_Chem_query").Range.AutoFilter Field:=6
-        ActiveSheet.ListObjects("bom_Chem_query").Range.AutoFilter Field:=6, _
+        ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=6
+        ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=6, _
         Criteria1:="<0", Operator:=xlAnd
         
      Else
@@ -84,3 +84,4 @@ Sub refreshOH()
     End If
     
 End Sub
+
