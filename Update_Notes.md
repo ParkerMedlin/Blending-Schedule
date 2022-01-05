@@ -1,5 +1,8 @@
 # Update Notes
 
+### 1-5-2022
+ - Blend These missed a shortage after my "fixing" so I reverted again and im leaving it at the 15 god awful fucked up redundant steps that it has. I'm sure I'll be back for more once I forget about this. 
+
 ### 1-4-2022 
 
  - Happy New Year! the Blend These table was broken this morning! opened up previous version and restored the query and then walked back through my steps i followed last week to make it more efficient. Not worth my time to dig deeper but I suspect that the reason it broke was because I removed the Table.Buffer step, which I now realize had a nested Table.Sort in it. So the table was all out of whack bc it wasn't being sorted correctly anymore. That has been fixed.  
