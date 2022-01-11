@@ -1,30 +1,30 @@
 
-Sub potatoPrinterCheckOut()
+Sub potatoPrinterBlendCounts()
 '///Assigned to printer icon on CheckOutCounts sheet///////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
 
 'hide rows
-    Range("A:D,G:I,L:L,N:AA").Select
+    Range("C:D,G:L").Select
     Selection.EntireColumn.Hidden = True
     
 'turn off macros
     Call macrosOff
 
 'select visible data body
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").DataBodyRange.Select
+    ActiveSheet.ListObjects("blendCounts_query").Range.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("blendCounts_query").DataBodyRange.Select
     
 'set row height
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.RowHeight = 32
+    ActiveSheet.ListObjects("blendCounts_query").Range.RowHeight = 32
     
 'Insert row, write in reason for counting
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-    Range("E1").Select
+    Range("A1").Select
     ActiveCell.FormulaR1C1 = "Reason for counting: if our info is wrong, we will run short on blends"
     With Selection.Font
         .Name = "Calibri"
-        .Size = 24
+        .Size = 16
         .Strikethrough = False
         .Superscript = False
         .Subscript = False
@@ -39,11 +39,11 @@ Sub potatoPrinterCheckOut()
 'Insert row, write in Count and Now()
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-    Range("E1").Select
+    Range("A1").Select
     ActiveCell.FormulaR1C1 = "Count for " & Now() & " - In Order of Production Needs"
     With Selection.Font
         .Name = "Calibri"
-        .Size = 24
+        .Size = 16
         .Strikethrough = False
         .Superscript = False
         .Subscript = False
@@ -66,9 +66,9 @@ Sub potatoPrinterCheckOut()
     Selection.Delete Shift:=xlUp
      
 'show rows again and change row height back
-    Range("A:D,G:I,L:L,N:AA").Select
+    Range("C:D,G:L").Select
     Selection.EntireColumn.Hidden = False
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.RowHeight = 21
+    ActiveSheet.ListObjects("blendCounts_query").Range.RowHeight = 21
     Range("A1").Select
     
 'turn on macros
@@ -321,11 +321,6 @@ Sub BlendTheseCounts()
     Selection.EntireColumn.Hidden = False
     Columns("W:AA").Select
     Selection.EntireColumn.Hidden = True
-    
-    
-    
-'set row height
-
     
 'select visible data body
     ActiveSheet.ListObjects("blendThese_TABLE").Range.SpecialCells(xlCellTypeVisible).Select

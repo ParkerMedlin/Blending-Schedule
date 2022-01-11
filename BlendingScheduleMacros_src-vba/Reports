@@ -1,144 +1,5 @@
-Sub HistoryReport()
-'///Triggers when you type in a part number on the HistoryReport page//////////////////////////////////////////////////////
-'///Gives you a report of all BI and BR transactions as well as all of our counts//////////////////////////////////////////
-
-'Navigation variables for the workbook names and the blend PN
-    Dim blendPN As String
-    blendPN = ActiveCell.Offset(-1, 0).Value
-    Dim src As String
-    src = ActiveWorkbook.Name
-    Dim reportWB As String
-    reportWB = "C:\OD\Kinpak, Inc\Blending - Documents\03 Projects\ReportGen-Destination\HistoryReport.xlsb"
-   
-'Open History Report and clear the unnecessary sheets
-    Workbooks.Open (reportWB)
-    reportWB = ActiveWorkbook.Name
-    Call clearitAllHistoryReport
-    Windows(src).Activate
-    
-'BI_BR transactions:
-    With ThisWorkbook
-        Sheets("BI_BR_Hist").Visible = True
-    End With
-    Sheets("BI_BR_Hist").Activate
-    ActiveSheet.ListObjects("BI_BR_Hist_TABLE").Range.AutoFilter Field:=1, Criteria1:= _
-        blendPN
-    Range("A1:F1").Select
-    Selection.Copy
-    Windows(reportWB).Activate
-    Range("A1").Select
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-        :=False, Transpose:=False
-    Windows(src).Activate
-    ActiveSheet.ListObjects("BI_BR_Hist_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
-    Selection.Copy
-    Windows(reportWB).Activate
-    Range("A2").Select
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-        :=False, Transpose:=False
-    ActiveSheet.Name = "transactHist"
-    Columns(3).Delete
-    Columns(4).Insert
-    Columns(4).Insert
-    Range("C:C").NumberFormat = "mm/dd/yyyy"
-    Worksheets("transactHist").Columns("A:F").AutoFit
-    Sheets.Add
-    Windows(src).Activate
-    ActiveSheet.ListObjects("BI_BR_Hist_TABLE").Range.AutoFilter Field:=1
-
-'countLog:
-    With ThisWorkbook
-        Sheets("CountLog").Visible = True
-        Sheets("CountLog").Activate
-    End With
-    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=1
-    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=2
-    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=3
-    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=4
-    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=5
-    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=5, Criteria1:= _
-        blendPN
-    Range("E1:O1").Select
-    Selection.Copy
-    Windows(reportWB).Activate
-    Range("A1").Select
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-       :=False, Transpose:=False
-    Windows(src).Activate
-    ActiveSheet.ListObjects("countLog_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
-    Selection.Copy
-    Windows(reportWB).Activate
-    Range("A2").Select
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-        :=False, Transpose:=False
-    ActiveSheet.Name = "countHist"
-    Columns(14).EntireColumn.Delete
-    Columns(13).EntireColumn.Delete
-    Columns(12).EntireColumn.Delete
-    Columns(11).EntireColumn.Delete
-    Columns(10).EntireColumn.Delete
-    Columns(9).EntireColumn.Delete
-    Columns(5).EntireColumn.Delete
-    Columns(4).EntireColumn.Delete
-    Columns(3).EntireColumn.Delete
-    Columns("E:E").Select
-    Selection.Cut
-    Columns("C:C").Select
-    Selection.Insert Shift:=xlToRight
-    Range("C:C").NumberFormat = "mm/dd/yyyy"
-    Worksheets("countHist").Columns("A:I").AutoFit
-    Windows(src).Activate
-    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=5
-    Windows(reportWB).Activate
-   
-'Composite report ordered by date
-    Sheets.Add
-    ActiveSheet.Name = "timeline"
-    Range("A1").Value = "Blend PN"
-    Range("B1").Value = "Description"
-    Range("C1").Value = "Date"
-    Range("D1").Value = "Exp OH"
-    Range("E1").Value = "Count"
-    Range("F1").Value = "TransacType"
-    Range("G1").Value = "TransacQty"
-    Sheets("countHist").Activate
-    Range("A2:F200").Select
-    Selection.Copy
-    Sheets("timeline").Activate
-    Range("A2").Select
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-           :=False, Transpose:=False
-    Range("A" & Rows.Count).End(xlUp).Offset(1).Select
-    Sheets("transactHist").Activate
-    Range("A2:G200").Select
-    Selection.Copy
-    Sheets("timeline").Activate
-    Range("A" & Rows.Count).End(xlUp).Offset(1).Select
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-           :=False, Transpose:=False
-    Range("A2:G200").Select
-    ActiveWorkbook.Worksheets("timeline").Sort.SortFields.Clear
-    ActiveWorkbook.Worksheets("timeline").Sort.SortFields.Add2 Key:=Range( _
-        "C2:C111"), SortOn:=xlSortOnValues, Order:=xlDescending, DataOption:= _
-        xlSortNormal
-    With ActiveWorkbook.Worksheets("timeline").Sort
-        .SetRange Range("A1:G111")
-        .Header = xlYes
-        .MatchCase = False
-        .Orientation = xlTopToBottom
-        .SortMethod = xlPinYin
-        .Apply
-    End With
-    Columns("A:G").AutoFit
-    Range("C:C").NumberFormat = "mm/dd/yyyy"
-    ActiveSheet.ListObjects.Add(xlSrcRange, Range("$A$1:$G$200"), , xlYes).Name = _
-        "timelineTable"
-  
-End Sub
-
-
 Sub todaysCounts()
-'///Assigned to the Sheet icon on CheckOutCounts page//////////////////////////////////////////////////////////////////////
+'///Assigned to the Sheet icon on CheckOutCounts page. meant for emailing jordan today's counts////////////////////////////
 '///Gives you a report of counts that are still on the main checkoutcounts page////////////////////////////////////////////
 
 'Navigation variables for the workbook names
@@ -157,7 +18,7 @@ Sub todaysCounts()
     
 'Go back, get the blanks out, and copy the list
     Windows(src).Activate
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("blendCounts_query").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
     Selection.Copy
     
 'Paste and insert row for headers
@@ -178,10 +39,10 @@ Sub todaysCounts()
         :=False, Transpose:=False
         
 'Clean up unnecessary columns, right to left. then Autofit
-    Columns("P:R").EntireColumn.Delete
-    Columns("M:N").EntireColumn.Delete
-    Columns("G:I").EntireColumn.Delete
-    Columns("A:E").EntireColumn.Delete
+    Columns("K:L").EntireColumn.Delete
+    Columns("H:I").EntireColumn.Delete
+    Columns("C:D").EntireColumn.Delete
+    Columns("A").EntireColumn.Delete
     Columns("A:E").AutoFit
     
 

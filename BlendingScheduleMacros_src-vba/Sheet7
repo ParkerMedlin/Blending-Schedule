@@ -1,0 +1,38 @@
+Private Sub Worksheet_Change(ByVal target As Range)
+
+    'Timestamper for when I enter a count for a blend
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then
+        If Not Intersect(target, Range("$F:$F")) Is Nothing Then
+            If target.Row > 1 Then
+               target.Offset(0, 1) = Now()
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub Worksheet_SelectionChange(ByVal target As Range)
+
+    'A:A triggers lot Number lookup macro
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then
+        If Selection.Count = 1 Then
+            If Not Intersect(target, Range("$A:$A")) Is Nothing Then
+                ReportSelekta.Show
+            End If
+        End If
+    End If
+   
+'--------------------------------------------------------------------
+
+'Macros On
+If Selection.Count = 1 Then
+    If Not Intersect(target, Range("$X$1")) Is Nothing Then
+        Call macrosOn
+    End If
+'Macros Off
+    If Not Intersect(target, Range("$Y$1")) Is Nothing Then
+        Call macrosOff
+    End If
+End If
+    
+End Sub

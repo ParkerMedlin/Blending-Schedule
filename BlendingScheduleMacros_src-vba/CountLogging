@@ -6,37 +6,31 @@ Sub LogCheckOutCounts()
     Call macrosOff
 
 'Clear all the filters
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=1
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=2
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=3
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=4
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=5
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=6
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=7
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=8
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=9
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=10
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=11
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=12
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=13
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=14
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=15
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=16
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=17
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").Range.AutoFilter Field:=18
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=1
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=2
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=3
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=4
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=5
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=6
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=7
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=8
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=9
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=10
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=11
+    ActiveSheet.ListObjects("blendCounts_query").Range.AutoFilter Field:=12
 
 'Select only the visible cells in a filtered table
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("blendCounts_query").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
 
 'Get the rowcount and insert correct num of rows
     Dim RowCount As Integer
     RowCount = Selection.Rows.Count
     Sheets("CountLog").Select
     Range("A2").EntireRow.Offset(1).Resize(RowCount).Insert Shift:=xlDown
-    Sheets("CheckOutCounts").Select
+    Sheets("BlendCounts").Select
 
 'Copy and paste active data body
-    ActiveSheet.ListObjects("checkOutCounts_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("blendCounts_query").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
     Selection.Copy
     Sheets("CountLog").Select
     Range("A3").Select
@@ -49,7 +43,7 @@ Sub LogCheckOutCounts()
     rowNum = 3
     
     For inc = 3 To 100
-        If IsEmpty(Range("K" & rowNum).Value) Then
+        If IsEmpty(Range("F" & rowNum).Value) Then
              Rows(rowNum).EntireRow.Delete
         Else
             rowNum = rowNum + 1
@@ -64,11 +58,11 @@ Sub LogCheckOutCounts()
         .Weight = xlThin
     End With
 
-'Timestamp on CHECKOUTdiff.log
-    Range("S3").Value = Now()
+'Timestamp on CountLogs
+    Range("M3").Value = Now()
 
 'Turn Macros back on
-    Sheets("CheckOutCounts").Select
+    Sheets("BlendCounts").Select
     Call macrosOn
 
 End Sub

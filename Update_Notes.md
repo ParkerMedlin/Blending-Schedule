@@ -1,5 +1,11 @@
 # Update Notes
 
+### 1-11-2021
+ - Took out all the sheet-keyed lookup macros and put them into a userform called ReportSelekta. This userform triggers when you click the blend part number on most sheets. 
+ - Rebuilt the checkoutcounts query. It's now called BlendCounts and it's much simpler.
+ - Fixed and removed various small things all around the sheets and the modules.  
+ - Added text box documentation to the macro-linked icons on blendthese and blendcounts.  
+
 ### 1-5-2022
  - Blend These missed a shortage after my "fixing" so I reverted again and im leaving it at the 15 god awful fucked up redundant steps that it has. I'm sure I'll be back for more once I forget about this. 
 

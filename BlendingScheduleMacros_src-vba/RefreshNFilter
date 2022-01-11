@@ -7,32 +7,27 @@ Sub refreshAndFilter()
     
     If uInput = vbYes Then
 
-        'Deactivate Blend These selection-based Sheet Code functions
+        'Deactivate BlendThese selection-based Sheet Code functions
         Call macrosOff
         
-        'Deactivate CheckOutCounts date logger function
-        Sheets("CheckOutCounts").Select
+        'Deactivate BlendCounts date logger function
+        Sheets("BlendCounts").Select
         Call macrosOff
     
         'Refresh All
         Application.Calculation = xlCalculationManual
         ActiveWorkbook.RefreshAll
     
-        'Auto size CheckOutCounts columns
-        Columns("E:U").Select
-        Columns("E:U").EntireColumn.AutoFit
-    
-        'Reactivate CheckOutCounts date logger function
+        'Reactivate BlendCounts date logger function
         Call macrosOn
         
         'Reactivate Blend These selection-based sheet code functions
         Sheets("BlendThese").Select
-        Columns("P").ColumnWidth = 3
         Call macrosOn
         
         'Re-filter chemShortages
         Sheets("ChemShortages").Select
-        ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=6, _
+        ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=7, _
         Criteria1:="<0", Operator:=xlAnd
         
         Application.Calculation = xlCalculationAutomatic
@@ -56,7 +51,7 @@ Sub refreshOH()
     
     'turn off the macros and calculations
     Application.Calculation = xlCalculationManual
-    Sheets("CheckOutCounts").Select
+    Sheets("BlendCounts").Select
     Call macrosOff
 
     'unhide blendqtyonhand and refresh and then rehide it
@@ -69,8 +64,8 @@ Sub refreshOH()
     Sheets("im.blendQty.onHand").Visible = False
      
 
-    'Refresh CheckOutCounts
-    Sheets("CheckOutCounts").Select
+    'Refresh BlendCounts
+    Sheets("BlendCounts").Select
     Range("B2").Select
     Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
         
