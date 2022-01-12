@@ -3,21 +3,21 @@ Sub potatoPrinterBlendCounts()
 '///Assigned to printer icon on CheckOutCounts sheet///////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
 
-'hide rows
+    'hide rows
     Range("C:D,G:L").Select
     Selection.EntireColumn.Hidden = True
     
-'turn off macros
+    'turn off macros
     Call macrosOff
 
-'select visible data body
+    'select visible data body
     ActiveSheet.ListObjects("blendCounts_query").Range.SpecialCells(xlCellTypeVisible).Select
     ActiveSheet.ListObjects("blendCounts_query").DataBodyRange.Select
     
-'set row height
+    'set row height
     ActiveSheet.ListObjects("blendCounts_query").Range.RowHeight = 32
     
-'Insert row, write in reason for counting
+    'Insert row, write in reason for counting
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
     Range("A1").Select
@@ -36,7 +36,7 @@ Sub potatoPrinterBlendCounts()
         .ThemeFont = xlThemeFontMinor
     End With
 
-'Insert row, write in Count and Now()
+    'Insert row, write in Count and Now()
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
     Range("A1").Select
@@ -55,23 +55,23 @@ Sub potatoPrinterBlendCounts()
         .ThemeFont = xlThemeFontMinor
     End With
     
-'print selection
+    'print selection
     copyNumber = InputBox("Number of Printed Copies")
     If Not copyNumber = "" Then
         ActiveWindow.SelectedSheets.PrintOut Copies:=copyNumber
     End If
     
-'delete the inserted rows
+    'delete the inserted rows
     Rows("1:2").Select
     Selection.Delete Shift:=xlUp
      
-'show rows again and change row height back
+    'show rows again and change row height back
     Range("C:D,G:L").Select
     Selection.EntireColumn.Hidden = False
     ActiveSheet.ListObjects("blendCounts_query").Range.RowHeight = 21
     Range("A1").Select
     
-'turn on macros
+    'turn on macros
     Call macrosOn
     
 End Sub

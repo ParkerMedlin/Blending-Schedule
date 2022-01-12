@@ -1,6 +1,9 @@
 # Update Notes
 
-### 1-11-2021
+### 1-12-2022
+ - Reverted to the prodschedule version of timeTable_query because blendThese was being weird.
+
+### 1-11-2022
  - Took out all the sheet-keyed lookup macros and put them into a userform called ReportSelekta. This userform triggers when you click the blend part number on most sheets. 
  - Rebuilt the checkoutcounts query. It's now called BlendCounts and it's much simpler.
  - Fixed and removed various small things all around the sheets and the modules.  
