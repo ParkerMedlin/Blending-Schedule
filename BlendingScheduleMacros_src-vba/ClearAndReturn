@@ -68,7 +68,7 @@ Sub clearPickSheetTableFilters()
  
 End Sub
 
-Sub clearCheckOutCountsFilter()
+Sub clearBlendCountsFilter()
 '///Assigned to cell the x button//////////////////////////////////////////////////////////////////////////////////////////
 '///Clears the filter only for [BlendPN], also sets M1 to blank////////////////////////////////////////////////////////////
 
@@ -97,22 +97,22 @@ Sub clearitAllHistoryReport()
 '///Assigned to the x icon on the CLEARSHEETS worksheet in the HistoryReport workbook//////////////////////////////////////
 '///Deletes the first three worksheets in the document/////////////////////////////////////////////////////////////////////
 
-'Turn off the warnings so that sheets can be deleted without interruption
-Application.DisplayAlerts = False
-
-'Start at the beginning
-Worksheets(1).Activate
-
-'Loop through all sheets and delete the ones that start with "Blending Issue Sheet"
-Dim i As Integer
-For i = 1 To (ActiveWorkbook.Worksheets.Count - 1)
-ActiveSheet.Delete
-Next i
-
-'Turn sheet delete warnings back on
-Application.DisplayAlerts = True
-
-Range("A2").Select
+    'Turn off the warnings so that sheets can be deleted without interruption
+    Application.DisplayAlerts = False
+    
+    'Start at the beginning
+    Worksheets(1).Activate
+    
+    'Loop through all sheets and delete the ones that start with "Blending Issue Sheet"
+    Dim i As Integer
+    For i = 1 To (ActiveWorkbook.Worksheets.Count - 1)
+    ActiveSheet.Delete
+    Next i
+    
+    'Turn sheet delete warnings back on
+    Application.DisplayAlerts = True
+    
+    Range("A2").Select
 
 End Sub
 

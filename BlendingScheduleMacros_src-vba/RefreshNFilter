@@ -15,7 +15,6 @@ Sub refreshAndFilter()
         Call macrosOff
     
         'Refresh All
-        Application.Calculation = xlCalculationManual
         ActiveWorkbook.RefreshAll
     
         'Reactivate BlendCounts date logger function
@@ -29,9 +28,7 @@ Sub refreshAndFilter()
         Sheets("ChemShortages").Select
         ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=7, _
         Criteria1:="<0", Operator:=xlAnd
-        
-        Application.Calculation = xlCalculationAutomatic
-        
+               
     Else
         MsgBox "Refresh cancelled."
 
@@ -41,44 +38,43 @@ End Sub
 
 
 Sub refreshOH()
-'///Assigned to the Abacus shape on CheckOutCounts sheet//////////////////////////////////////////////////////////////////
-'///refreshes the qty we have on hand as well as the runs listed on CheckOutCounts/////////////////////////////////////////
+'///Assigned to the single arrow shape on BlendCounts sheet////////////////////////////////////////////////////////////////
+'///refreshes the qty we have on hand without refreshing the runs listed on BlendCounts////////////////////////////////////
 
     Dim uInput2 As Integer
     uInput2 = MsgBox("Proceed with OnHand Refresh?", vbQuestion + vbYesNo)
     
     If uInput2 = vbYes Then
     
-    'turn off the macros and calculations
-    Application.Calculation = xlCalculationManual
-    Sheets("BlendCounts").Select
-    Call macrosOff
-
-    'unhide blendqtyonhand and refresh and then rehide it
-    With ThisWorkbook
-       Sheets("im.blendQty.onHand").Visible = True
-       Sheets("im.blendQty.onHand").Select
-    End With
-    Range("B2").Select
-    Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
-    Sheets("im.blendQty.onHand").Visible = False
-     
-
-    'Refresh BlendCounts
-    Sheets("BlendCounts").Select
-    Range("B2").Select
-    Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
-        
-    'Autofit columns
-    Columns("A:L").Select
-    Columns("A:L").EntireColumn.AutoFit
+        'turn off the macros
+        Sheets("BlendCounts").Select
+        Call macrosOff
     
-    'Re-enable date logger and calculations
-    Call macrosOn
-    Application.Calculation = xlCalculationAutomatic
+        'unhide blendqtyonhand and refresh and then rehide it
+        With ThisWorkbook
+           Sheets("im.blendQty.onHand").Visible = True
+           Sheets("im.blendQty.onHand").Select
+        End With
+        Range("B2").Select
+        Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
+        Sheets("im.blendQty.onHand").Visible = False
+    
+        'Refresh BlendCounts
+        Sheets("BlendCounts").Select
+        Range("B2").Select
+        Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
+            
+        'Autofit columns
+        Columns("A:L").Select
+        Columns("A:L").EntireColumn.AutoFit
+        
+        'Re-enable date logger and calculations
+        Call macrosOn
 
     Else
+    
         MsgBox "Refresh cancelled."
+        
     End If
     
 End Sub

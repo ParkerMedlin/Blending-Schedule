@@ -2,26 +2,26 @@ Sub todaysCounts()
 '///Assigned to the Sheet icon on CheckOutCounts page. meant for emailing jordan today's counts////////////////////////////
 '///Gives you a report of counts that are still on the main checkoutcounts page////////////////////////////////////////////
 
-'Navigation variables for the workbook names
+    'Navigation variables for the workbook names
     Dim src As String
     src = ActiveWorkbook.Name
     Dim reportWB As String
     reportWB = "C:\OD\Kinpak, Inc\Blending - Documents\03 Projects\ReportGen-Destination\DailyCountReport.xlsm"
     
-'Turn macros off
+    'Turn macros off
     Call macrosOff
 
-'Open workbook and clear info from last time
+    'Open workbook and clear info from last time
     Workbooks.Open (reportWB)
     reportWB = ActiveWorkbook.Name
     Columns("A:E").EntireColumn.Delete
     
-'Go back, get the blanks out, and copy the list
+    'Go back, get the blanks out, and copy the list
     Windows(src).Activate
     ActiveSheet.ListObjects("blendCounts_query").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
     Selection.Copy
     
-'Paste and insert row for headers
+    'Paste and insert row for headers
     Windows(reportWB).Activate
     Range("A1").Select
     Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
@@ -29,7 +29,7 @@ Sub todaysCounts()
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
 
-'Headers copypasta
+    'Headers copypasta
     Windows(src).Activate
     Range("A1:R1").Select
     Selection.Copy
@@ -38,7 +38,7 @@ Sub todaysCounts()
     Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
         :=False, Transpose:=False
         
-'Clean up unnecessary columns, right to left. then Autofit
+    'Clean up unnecessary columns, right to left. then Autofit
     Columns("K:L").EntireColumn.Delete
     Columns("H:I").EntireColumn.Delete
     Columns("C:D").EntireColumn.Delete
@@ -46,13 +46,13 @@ Sub todaysCounts()
     Columns("A:E").AutoFit
     
 
-'Select the active stuff and format
+    'Select the active stuff and format
     Dim addy As String
     Range("A1").End(xlDown).Select
     addy = ActiveCell.Address
     Range(addy & ":E1").Select
     
-'Gross formatting borders ew this is so very chunk
+    'Gross formatting borders ew this is so very chunk
     Selection.Borders(xlDiagonalDown).LineStyle = xlNone
     Selection.Borders(xlDiagonalUp).LineStyle = xlNone
     With Selection.Borders(xlEdgeLeft)
@@ -95,14 +95,14 @@ Sub todaysCounts()
     Range("A1:E1").Select
     Selection.Font.Bold = True
     
-'Delete blanks and format date column
+    'Delete blanks and format date column
     Columns("C:C").Select
     Selection.SpecialCells(xlCellTypeBlanks).Select
     Selection.EntireRow.Delete
     Range("D:D").Select
     Selection.NumberFormat = "m/d/yyyy"
    
-'Back to other workbook, macrosOn, then end on destination workbook
+    'Back to other workbook, macrosOn, then end on destination workbook
     Windows(src).Activate
     Call macrosOn
     Windows(reportWB).Activate
@@ -115,23 +115,23 @@ Sub startronReport()
 '///Assigned to the startron logo on the BlendThese sheet//////////////////////////////////////////////////////////////////
 '///Selects the blendData sheet and filters the table there by the blend PN of the row you click on////////////////////////
 
-'Navigation variables for the workbook names
+    'Navigation variables for the workbook names
     Dim src As String
     src = ActiveWorkbook.Name
     Dim reportWB As String
     reportWB = "C:\OD\Kinpak, Inc\Blending - Documents\03 Projects\ReportGen-Destination\StartronReport.xlsm"
 
-'Open workbook and clear info from last time
+    'Open workbook and clear info from last time
     Workbooks.Open (reportWB)
     reportWB = ActiveWorkbook.Name
     Columns("A:I").EntireColumn.Delete
 
-'Unhide and select BlendData sheet
+    'Unhide and select BlendData sheet
     Windows(src).Activate
     Sheets("blendData").Visible = True
     Sheets("blendData").Select
    
-'filter the list by all the different startron blend PNs and copy the table to the report workbook each time
+    'filter the list by all the different startron blend PNs and copy the table to the report workbook each time
         ActiveSheet.ListObjects("blendData_TABLE").Range.AutoFilter Field:=2, Criteria1:= _
             Array("14308.B", "14308AMBER.B", "93100DSL.B", "93100GAS.B", "93100TANK.B", "93100GASBLUE.B", "93100GASAMBER.B"), _
             Operator:=xlFilterValues
@@ -143,7 +143,7 @@ Sub startronReport()
         End With
         Windows(src).Activate
 
-'Bring over the headers
+    'Bring over the headers
     Windows(src).Activate
     ActiveSheet.ListObjects("blendData_TABLE").Range.AutoFilter Field:=2
     Range("A1:I1").Copy
@@ -155,11 +155,11 @@ Sub startronReport()
         :=False, Transpose:=False
     End With
     
-'Make a table
+    'Make a table
     ActiveSheet.ListObjects.Add(xlSrcRange, Range("$A$1:$I$200"), , xlYes).Name = _
         "startronTable"
     
-'loop through the first 100 rows and delete ones that don't have a count in them
+    'loop through the first 100 rows and delete ones that don't have a count in them
     Dim inc As Integer
     Dim rowNum As Integer
     rowNum = 3
@@ -172,10 +172,10 @@ Sub startronReport()
         End If
     Next inc
     
-'Autofit columns
+    'Autofit columns
     Columns("A:G").AutoFit
 
-'Sort by StartTime
+    'Sort by StartTime
     ActiveWorkbook.Worksheets("Report").ListObjects("startronTable").Sort. _
         SortFields.Add2 Key:=Range("startronTable[[#All],[StartTime]]"), SortOn:= _
         xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal

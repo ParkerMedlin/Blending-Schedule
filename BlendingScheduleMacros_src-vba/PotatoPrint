@@ -81,18 +81,18 @@ Sub printBlendThese()
 '///Assigned to printer on BlendThese//////////////////////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it///////////////////////////////////////////////////////////////////////////////////
 
-'hide columns
+    'hide columns
     Range("A:D,L:P,T:AA").Select
     Selection.EntireColumn.Hidden = True
     
-'off with the Macros
+    'off with the Macros
     Call macrosOff
 
-'input box
+    'input box
     copyNumber = InputBox("Number of Printed Copies")
     If Not copyNumber = "" Then
         
-'insert row
+        'insert row
         Rows("1:1").Select
         Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
         Range("B1").Select
@@ -111,7 +111,7 @@ Sub printBlendThese()
             .ThemeFont = xlThemeFontMinor
         End With
     
-'print selection
+        'print selection
         Application.PrintCommunication = False
         With ActiveSheet.PageSetup
             .PrintTitleRows = ""
@@ -221,19 +221,19 @@ Sub printBlendThese()
         ActiveWindow.SelectedSheets.PrintOut Copies:=1, Collate:=True, _
             IgnorePrintAreas:=False
         
-'delete row
+        'delete row
         Rows("1:1").Select
         Selection.Delete Shift:=xlUp
         
     End If
    
    
-'show columns again
+    'show columns again
     Range("A:D,L:P,T:AA").Select
     Selection.EntireColumn.Hidden = False
     Range("E1").Select
 
-'turn on macros
+    'turn on macros
     Call macrosOn
     
 End Sub
@@ -243,22 +243,22 @@ Sub potatoPrinterChemstoCheck()
 '///Assigned to printer icon on chemstocheck sheet/////////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
 
-'hide rows
+    'hide rows
     Range("A:B").Select
     Selection.EntireColumn.Hidden = True
     
-'select visible data body
+    'select visible data body
     ActiveSheet.ListObjects("pickSheet_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
     ActiveSheet.ListObjects("pickSheet_TABLE").DataBodyRange.Select
     
-'set row height
+    'set row height
     ActiveSheet.ListObjects("pickSheet_TABLE").Range.RowHeight = 32
     
-'remove duplicates
+    'remove duplicates
     ActiveSheet.Range("pickSheet_TABLE[#All]").RemoveDuplicates Columns:=3 _
         , Header:=xlYes
     
-'Insert row, write in Count and Now()
+    'Insert row, write in Count and Now()
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
     Range("C1").Select
@@ -277,23 +277,23 @@ Sub potatoPrinterChemstoCheck()
         .ThemeFont = xlThemeFontMinor
     End With
     
-'print selection
+    'print selection
     copyNumber = InputBox("Number of Printed Copies")
     If Not copyNumber = "" Then
         ActiveWindow.SelectedSheets.PrintOut Copies:=copyNumber
     End If
     
-'delete the inserted date row
+    'delete the inserted date row
     Rows("1:1").Select
     Selection.Delete Shift:=xlUp
           
-'show rows again and change row height back
+    'show rows again and change row height back
     Range("A:B").Select
     Selection.EntireColumn.Hidden = False
     ActiveSheet.ListObjects("pickSheet_TABLE").Range.RowHeight = 21
     Range("A1").Select
     
-'refresh to restore order
+    'refresh to restore order
     Range("C2").Select
     Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
    
@@ -303,16 +303,16 @@ Sub BlendTheseCounts()
 '///Assigned to arrow icon on BlendThese sheet/////////////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
 
-'off with the Macros
+    'off with the Macros
     Call macrosOff
     
-'Filter for items that have not been checked since last change in inventory
+    'Filter for items that have not been checked since last change in inventory
     ActiveSheet.ListObjects("blendThese_TABLE").Range.AutoFilter Field _
         :=9, Criteria1:=RGB(146, 208, 80), Operator:=xlFilterCellColor
     
         ActiveSheet.ListObjects("blendThese_TABLE").Range.RowHeight = 32
 
-'Hide unneccessary columns
+    'Hide unneccessary columns
     Columns("A:D").Select
     Selection.EntireColumn.Hidden = True
     Columns("H:U").Select
@@ -322,18 +322,18 @@ Sub BlendTheseCounts()
     Columns("W:AA").Select
     Selection.EntireColumn.Hidden = True
     
-'select visible data body
+    'select visible data body
     ActiveSheet.ListObjects("blendThese_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
     ActiveSheet.ListObjects("blendThese_TABLE").DataBodyRange.Select
     
-'print selection
+    'print selection
     copyNumber = InputBox("Number of Printed Copies")
     If Not copyNumber = "" Then
         ActiveSheet.PageSetup.Orientation = xlPortrait
         ActiveWindow.SelectedSheets.PrintOut Copies:=copyNumber
     End If
     
-'clear color filter, reset row height, then unhide the columns
+    'clear color filter, reset row height, then unhide the columns
     ActiveSheet.ListObjects("blendThese_TABLE").Range.AutoFilter Field:=9
     ActiveSheet.ListObjects("blendThese_TABLE").Range.RowHeight = 15
     Columns("A:D").Select

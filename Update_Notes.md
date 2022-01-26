@@ -1,5 +1,14 @@
 # Update Notes
 
+### 1-26-2022
+ - Select qty cell after the lot num gen macro 
+
+### 1-18-2022
+ - cleared out some unnecessary Private Subs
+
+### 1-13-2022
+ - Changed MacrosOff so it just clears the cell instead of inserting "Off"
+
 ### 1-12-2022
  - Reverted to the prodschedule version of timeTable_query because blendThese was being weird.
 
@@ -10,14 +19,12 @@
  - Added text box documentation to the macro-linked icons on blendthese and blendcounts.  
 
 ### 1-5-2022
- - Blend These missed a shortage after my "fixing" so I reverted again and im leaving it at the 15 god awful fucked up redundant steps that it has. I'm sure I'll be back for more once I forget about this. 
+ - Blend These missed a shortage after my "fixing" so I reverted again and im leaving it at the 15 god awful fucked up redundant steps that it has. I'm sure I'll be back for more punishment once I forget about this. 
 
 ### 1-4-2022 
-
  - Happy New Year! the Blend These table was broken this morning! opened up previous version and restored the query and then walked back through my steps i followed last week to make it more efficient. Not worth my time to dig deeper but I suspect that the reason it broke was because I removed the Table.Buffer step, which I now realize had a nested Table.Sort in it. So the table was all out of whack bc it wasn't being sorted correctly anymore. That has been fixed.  
 
 ### 12-20-2021
-
  - removed the following queries:
 	 - issueSheet_table
 	 - bom_blend_query and table
