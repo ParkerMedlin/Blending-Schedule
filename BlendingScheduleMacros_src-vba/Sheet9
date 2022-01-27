@@ -1,10 +1,10 @@
 Private Sub Worksheet_Change(ByVal target As Range)
 
-'Timestamper for when I enter a count for a blend
+    'Timestamper for when I enter a count for a blend
     If InStr(1, (Range("AA1").Value), "On") > 0 Then
-        If Not Intersect(target, Range("$C$3")) Is Nothing Then
+        If Not Intersect(target, Range("$F1:$F200")) Is Nothing Then
             If target.Row > 1 Then
-               Call HistoryReport
+               target.Offset(0, 1) = Now()
             End If
         End If
     End If

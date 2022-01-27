@@ -1,5 +1,9 @@
 # Update Notes
 
+### 1-27-2022
+ - Added 2 tables for chem counts and logging those counts
+ - updated the countLog sub so that it now has variables that can be set depending which sheet is active (blendCounts vs chemCounts)
+
 ### 1-26-2022
  - Select qty cell after the lot num gen macro 
 
