@@ -1,0 +1,164 @@
+Private Sub BI_BR_button_Click()
+'///Selects the BI_BR transaction sheet and filters the table by the blend PN of the row you selected//////////////////////
+
+    Dim blendPN As String
+    blendPN = ActiveCell.Value
+    With ThisWorkbook
+       Sheets("BI_BR_Hist").Visible = True
+       Sheets("BI_BR_Hist").Select
+       ActiveSheet.ListObjects("BI_BR_Hist_TABLE").Range.AutoFilter Field:=1, Criteria1:= _
+            blendPN
+    End With
+    
+    Unload BlendReportSelekta
+
+End Sub
+
+Private Sub blendDataLookup_button_Click()
+'///Selects the blendData sheet and filters the table there by the blend PN of the row you click on////////////////////////
+
+    Dim blendPN As String
+    blendPN = ActiveCell.Value
+    With ThisWorkbook
+       Sheets("blendData").Visible = True
+       Sheets("blendData").Select
+       ActiveSheet.ListObjects("blendData_TABLE").Range.AutoFilter Field:=2, Criteria1:= _
+            blendPN
+    End With
+    
+    Unload BlendReportSelekta
+    
+End Sub
+
+Private Sub countLogLookup_button_Click()
+'///Selects the CountLog sheet and filters the table by the blend PN of the row you click on///////////////////////////////
+
+    Dim blendPN As String
+    blendPN = ActiveCell.Value
+    With ThisWorkbook
+        Sheets("CountLog").Select
+        ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=1, Criteria1:= _
+            blendPN
+    End With
+    
+    Unload BlendReportSelekta
+        
+End Sub
+
+Private Sub historyReport_button_Click()
+'///Gives you a report of all BI and BR transactions, as well as all of our counts, in chronological order/////////////////
+
+    'Navigation variables for the workbook names and the blend PN
+    Dim blendPN As String
+    blendPN = ActiveCell.Value
+    Dim src As String
+    src = ActiveWorkbook.Name
+    Dim reportWB As String
+    reportWB = "C:\OD\Kinpak, Inc\Blending - Documents\03 Projects\ReportGen-Destination\HistoryReport.xlsb"
+   
+    'Open History Report and clear the unnecessary sheets
+    Workbooks.Open (reportWB)
+    reportWB = ActiveWorkbook.Name
+     
+    Range("A:F").Delete
+    ActiveWorkbook.Sheets.Add
+    Sheets(1).Activate
+    Windows(src).Activate
+    
+    'countLog:
+    With ThisWorkbook
+        Sheets("CountLog").Activate
+    End With
+    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=1, Criteria1:= _
+        blendPN
+    ActiveSheet.ListObjects("countLog_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+    Selection.Copy
+    Windows(reportWB).Activate
+    Range("A1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Range("C:E, H:L").EntireColumn.Delete
+    
+    'BI_BR transactions:
+    Windows(src).Activate
+    With ThisWorkbook
+        Sheets("BI_BR_Hist").Visible = True
+    End With
+    Sheets("BI_BR_Hist").Activate
+    ActiveSheet.ListObjects("BI_BR_Hist_TABLE").Range.AutoFilter Field:=1, Criteria1:= _
+        blendPN
+    ActiveSheet.ListObjects("BI_BR_Hist_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+    Selection.Copy
+    Windows(reportWB).Activate
+    Sheets(2).Activate
+    Range("A1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Columns(3).ClearContents
+    Columns(7).Delete
+    Range("A1:F100").Copy
+    Sheets(1).Activate
+    Range("A" & Rows.Count).End(xlUp).Offset(1).Select
+    Selection.PasteSpecial Paste:=xlPasteValues
+
+    'Composite report ordered by date
+    Range("A1").Value = "Blend PN"
+    Range("B1").Value = "Description"
+    Range("C1").Value = "Count"
+    Range("D1").Value = "Date"
+    Range("E1").Value = "TransacType"
+    Range("F1").Value = "TransacQty"
+    Range("A" & Rows.Count).End(xlUp).Offset(1).Select
+    Dim rowNum As Integer
+    rowNum = Selection.Row - 1
+    ActiveSheet.ListObjects.Add(xlSrcRange, Range("A1:F" & rowNum), , xlYes).Name = _
+        "timelineTable"
+    Dim tbl As ListObject
+    Set tbl = Sheets(1).ListObjects("timelineTable")
+    With tbl.Sort
+       .SortFields.Add Key:=Range("timelineTable[Date]"), SortOn:=xlSortOnValues, Order:=xlDescending
+       .Header = xlYes
+       .Apply
+    End With
+    Range("D:D").NumberFormat = "mm/dd/yyyy"
+    Columns("A:F").AutoFit
+    
+    Windows(src).Activate
+    Sheets("BI_BR_Hist").Activate
+    
+    ActiveSheet.ListObjects("BI_BR_Hist_TABLE").Range.AutoFilter Field:=1
+    Sheets("BI_BR_Hist").Visible = False
+    Sheets("CountLog").Activate
+    ActiveSheet.ListObjects("countLog_TABLE").Range.AutoFilter Field:=1
+    Unload BlendReportSelekta
+       
+    
+    Windows(reportWB).Activate
+    Application.DisplayAlerts = False
+    Sheets(2).Delete
+    Application.DisplayAlerts = True
+    
+    Unload BlendReportSelekta
+    
+End Sub
+
+Private Sub lotNumLookup_button_Click()
+'///Opens the lot number generator workbook and filters the table by the blend PN of the row you click on//////////////////
+
+    'Get Blend PN
+    Dim blendPN As String
+    blendPN = ActiveCell.Value
+
+    'Get filepath of Blenging Lont Ntumbner Grenerartror dot xlsx
+    Dim LotNumGenPath As String
+    LotNumGenPath = "C:\OD\Kinpak, Inc\Blending - Documents\01 Spreadsheet Tools\Blending Lot Number Generator\LotNumGenerator-Prod\Blending Lot Number Generator"
+    Workbooks.Open LotNumGenPath
+
+    'Filter the list
+    ActiveSheet.Range("$A:$A").AutoFilter Field:=1, Criteria1:=blendPN _
+        , Operator:=xlAnd
+    
+    Unload BlendReportSelekta
+        
+End Sub
+

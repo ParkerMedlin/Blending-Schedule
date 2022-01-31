@@ -1,5 +1,9 @@
 # Update Notes
 
+### 1-31-2022
+ - Made countLog sub better by changing all the individual autofilter clears to ListObject.Autofilter.ShowAllData
+ - Got started on a report that will show us the usage of a given chemical over the course of all upcoming runs in the schedule for all the blends that use that chem
+
 ### 1-27-2022
  - Added 2 tables for chem counts and logging those counts
  - updated the countLog sub so that it now has variables that can be set depending which sheet is active (blendCounts vs chemCounts)
