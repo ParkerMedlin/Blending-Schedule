@@ -1,5 +1,10 @@
 # Update Notes
 
+### 2-1-2022 
+ - Finished the chem report sub (called 'realSpecificHours' under the Reports module)
+ - Added a column to the bom.master table for weight per gal from Sage
+ - Added a sub to ClearnFilter module for wiping the realSpecificHours table
+
 ### 1-31-2022
  - Made countLog sub better by changing all the individual autofilter clears to ListObject.Autofilter.ShowAllData
  - Got started on a report that will show us the usage of a given chemical over the course of all upcoming runs in the schedule for all the blends that use that chem
