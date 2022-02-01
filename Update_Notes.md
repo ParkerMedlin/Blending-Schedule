@@ -4,6 +4,7 @@
  - Finished the chem report sub (called 'realSpecificHours' under the Reports module)
  - Added a column to the bom.master table for weight per gal from Sage
  - Added a sub to ClearnFilter module for wiping the realSpecificHours table
+ - Removed pickSheetTable
 
 ### 1-31-2022
  - Made countLog sub better by changing all the individual autofilter clears to ListObject.Autofilter.ShowAllData
