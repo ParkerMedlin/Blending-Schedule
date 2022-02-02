@@ -1,0 +1,189 @@
+
+
+Private Sub UpcomingDeliveries_Click()
+    
+    '///Filters upcoming Sage PO transactions by chemPN///////////////////////////////////////
+    Dim chemPN As String
+    chemPN = ActiveCell.Value
+    With ThisWorkbook
+       Sheets("ChemDelivery").Visible = True
+       Sheets("ChemDelivery").Select
+       ActiveSheet.ListObjects("ChemDelivery_TABLE").Range.AutoFilter Field:=1, Criteria1:= _
+            chemPN
+    End With
+    
+    Unload ChemReportSelekta
+    
+    
+End Sub
+
+Private Sub MRP_Button_Click()
+'///shows exactly when we're going to run short on a chemical////////////////////////
+    Dim chemPN As String
+    chemPN = Format(ActiveCell.Value, "000000")
+    Dim chemOH As Double
+    chemOH = ActiveCell.Offset(0, -4)
+    Dim numberOfBlends As Integer
+    
+        'obtain list of all blends that use the selected chemical
+        Sheets("bom.Master").Visible = True
+        Sheets("bom.Master").Select
+        ActiveSheet.ListObjects("bom.master_TABLE").Range.AutoFilter Field:=4, Criteria1:= _
+             chemPN
+        ActiveSheet.ListObjects("bom.master_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+        numberOfBlends = Selection.Rows.Count
+        Selection.Copy
+        Sheets("ChemReqReport").Visible = True
+        Sheets("ChemReqReport").Select
+        'clear if empty
+        If Not IsEmpty(Range("A1")) Then
+            Sheets("ChemReqReport").ListObjects("chemUseRuns_TBL").Delete
+        End If
+        Range("A1").Select
+        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+        Range("A1").Select
+        Application.CutCopyMode = False
+        
+        'create string array and populate it with the blendPN's just obtained in the last code block
+        Dim blendPNList() As String
+        ReDim blendPNList(numberOfBlends)
+        Dim arrayPosition As Integer
+        arrayPosition = 0
+        Dim i As Integer
+        For i = 1 To numberOfBlends
+            blendPNList(arrayPosition) = Range("A" & i)
+            arrayPosition = arrayPosition + 1
+        Next i
+                
+        'Clear temp list of blend PN's and then unfilter
+        Range("A1:I50").ClearContents
+        Sheets("bom.Master").Select
+        ActiveSheet.ListObjects("bom.master_TABLE").Range.AutoFilter Field:=4
+    
+        'Get all the runs for all those blend PN's
+        Sheets("blendData").Visible = True
+        Sheets("blendData").Select
+        Sheets("blendData").Range("B1").AutoFilter _
+            Field:=2, _
+            Criteria1:=blendPNList, _
+            Operator:=xlFilterValues
+        Sheets("blendData").Range("C1").AutoFilter Field:=3, Criteria1:="<>"
+        ActiveSheet.ListObjects("blendData_TABLE").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+        Selection.Copy
+        Sheets("ChemReqReport").Select
+        Range("A2").Select
+        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+        Sheets("blendData").Select
+        ActiveSheet.ListObjects("blendData_TABLE").HeaderRowRange.Select
+        Selection.Copy
+        
+        'Paste to the new sheet, delete unnecessary columns, make a table, sort the table by StartTime
+        Sheets("ChemReqReport").Select
+        Range("A1").Select
+        Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+        Columns("G:I").EntireColumn.Delete
+        Columns("A").EntireColumn.Delete
+        Range("A" & Rows.Count).End(xlUp).Offset(1).Select
+        Dim rowC As Integer
+        rowC = Selection.Row - 1
+        ActiveSheet.ListObjects.Add(xlSrcRange, Range("A1:K" & rowC), , xlYes).Name = _
+            "chemUseRuns_TBL"
+        ActiveSheet.ListObjects("chemUseRuns_TBL").TableStyle = "TableStyleLight8"
+        Dim tbl As ListObject
+        Set tbl = ActiveSheet.ListObjects("chemUseRuns_TBL")
+        With tbl.Sort
+           .SortFields.Add Key:=Range("chemUseRuns_TBL[StartTime]"), SortOn:=xlSortOnValues, Order:=xlAscending
+           .Header = xlYes
+           .Apply
+        End With
+        Range("C1").Value = "BlndRunQty"
+        Range("F1").Value = "RunningTotal" 'Column to calculate a running total for each blend
+        Range("F2").Formula2 = "=SUMIF($A$2:$A2,$A2,$C$2:$C2)"
+        Range("G1").Value = "BlndShort" 'Column to calculate how much blend is left over after each run
+        Range("G2").Formula2 = "=(INDEX(blendQty_OnHand_TABLE[TotalQty],MATCH([@Blend],blendQty_OnHand_TABLE[ItemCode],0)))-[@RunningTotal]"
+        Range("A2:K" & rowC).Copy 'Copypaste as values so the running blend total numbers are preserved when we clear out non-shortage runs
+        Range("A2").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+        Application.CutCopyMode = False
+    
+        'loop through the first 50 rows and delete all but blend shortages
+            Dim inc As Integer
+            Dim rowNum As Integer
+            rowNum = 2
+            For inc = 2 To 50
+                If Range("G" & rowNum).Value > 0 Then
+                     Rows(rowNum).EntireRow.Delete
+                Else
+                    rowNum = rowNum + 1
+                End If
+            Next inc
+        
+        Range("H1").Value = "ChemPN"
+        Range("A" & Rows.Count).End(xlUp).Offset(1).Select
+        rowC = Selection.Row - 1
+        Dim i2 As Integer
+        For i2 = 2 To rowC
+            Range("H" & i2).Value = "'" & chemPN
+        Next i2
+        Range("I1").Value = "QtyPerBill" 'Column to bring in the qtyPerBill from bom.master
+        Range("I2").Formula2 = "=INDEX(bom.master_TABLE[QuantityPerBill],MATCH(1,([@Blend]=bom.master_TABLE[BillNo])*([@ChemPN]=bom.master_TABLE[ComponentItemCode]),0))"
+        Range("J1").Value = "ChmRunQty" 'Column to calculate the chem usage for each individual run
+        Range("J2").Formula2 = "=([@BlndShort] * -1 * [@QtyPerBill])"
+        Range("K1").Value = "ChemLeftOverAfterRun" 'Column to add up a cumulative total for the chem usage
+        Range("K2").Formula2 = "=(INDEX(blendQty_OnHand_TABLE[TotalQty],MATCH([@ChemPN],blendQty_OnHand_TABLE[ItemCode],0)))-SUM($J$2:$J2)"
+        Range("A2:K" & rowC).Copy
+        Range("A2").PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+            :=False, Transpose:=False
+        Application.CutCopyMode = False
+        
+        'Hide columns and autofit
+        Columns("C").Cut
+        Columns("F").Insert Shift:=xlToRight
+        Columns("A:L").AutoFit
+        Columns("A").Hidden = True
+        Columns("F").Hidden = True
+        Columns("H:I").Hidden = True
+                
+        'Highlight the runs where chemicals are short
+            rowNum = 2
+            For i3 = 1 To rowC
+                If Range("K" & rowNum) < 0 Then
+                    Range("A" & rowNum & ":" & "K" & rowNum).Select
+                    With Selection.Interior
+                        .Pattern = xlSolid
+                        .PatternColorIndex = xlAutomatic
+                        .Color = 65535
+                        .TintAndShade = 0
+                        .PatternTintAndShade = 0
+                    End With
+                Else
+                    rowNum = rowNum + 1
+                End If
+            Next i3
+        
+    'cleanup
+    Sheets("bom.Master").Visible = False
+    Sheets("blendData").Range("B1").AutoFilter Field:=2
+    Sheets("blendData").Visible = False
+    Unload ChemReportSelekta
+    
+End Sub
+
+Private Sub BI_BR_Hist_Click()
+
+'///Filters recent Sage transactions by chemPN///////////////////////////////////////
+    Dim chemPN As String
+    chemPN = ActiveCell.Value
+    With ThisWorkbook
+       Sheets("BI_BR_Hist").Visible = True
+       Sheets("BI_BR_Hist").Select
+       ActiveSheet.ListObjects("BI_BR_Hist_TABLE").Range.AutoFilter Field:=1, Criteria1:= _
+            chemPN
+    End With
+    
+    Unload ChemReportSelekta
+
+End Sub

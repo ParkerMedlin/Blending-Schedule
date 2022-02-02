@@ -1,0 +1,3 @@
+Sub Workbook_BeforeClose(Cancel As Boolean)
+    ActiveWorkbook.Sheets("ChemShortages").Activate
+End Sub

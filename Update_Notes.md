@@ -1,5 +1,9 @@
 # Update Notes
 
+### 2-2-2022
+ - Continued work on the mrp-ish report and added a couple others and put them all in a userform like BlendReportSelekta
+ - Simplified clearAndReturn subs, removed a few, also removed the printer sub for the pickSheetTable
+
 ### 2-1-2022 
  - Finished the chem report sub (called 'realSpecificHours' under the Reports module)
  - Added a column to the bom.master table for weight per gal from Sage
