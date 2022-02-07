@@ -1,5 +1,15 @@
 # Update Notes
 
+### 2-7-2022
+ - Standardized the count sheet print sub so that it works on both chemCounts and blendCounts
+ - Moved more of the icons over to the chemCounts sheet w/ supporting documentation
+ - Removed unnecessary pagesetup formatting in the blendThese print sub
+ - Added an indicator to blendCounts that shows whether the blend is on BlendThese (shortage that needs to be blended)
+ - Standardized the clear filter macro to work on all tables
+ - Standardized clearAndReturn so it just grabs the destination from the active cell
+ - Added the lookup macro mapping to the cells on ChemCounts containing chem part numbers, like in chemShortage
+ - fixed daily report extra row being copied over
+
 ### 2-2-2022
  - Continued work on the mrp-ish report and added a couple others and put them all in a userform like BlendReportSelekta
  - Simplified clearAndReturn subs, removed a few, also removed the printer sub for the pickSheetTable
