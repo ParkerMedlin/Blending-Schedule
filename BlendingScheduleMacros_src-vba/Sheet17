@@ -1,0 +1,16 @@
+Private Sub Worksheet_SelectionChange(ByVal target As Range)
+
+If Selection.Count = 1 Then
+'--------------------------------------------------------------------
+
+'N:N triggers clearChemsToCheckFilter
+    
+    If Not Intersect(target, Range("$N$1:$N$1")) Is Nothing Then
+        Call clearChemsToCheckFilter
+    End If
+    
+
+End If
+
+End Sub
+

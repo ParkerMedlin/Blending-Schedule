@@ -1,3 +1,111 @@
+Sub blndShtGen3wk()
+'///Assigned to the 3wk column on Blend These//////////////////////////////////////////////////////////////////////////////
+'///Opens the blend sheet workbook for the blend on the row you click. Inputs the 3wk qty into said blend sheet.///////////
+
+'String for current workbook name
+    Dim src As String
+    src = ActiveWorkbook.Name
+
+'Copy the value of the shortage qty cell
+    Selection.Copy
+    
+'Get the filepath + name of the appropriate blend sheet
+    Dim blndShtPath As String
+    blndShtPath = ActiveCell.Offset(0, -3).Value
+    Workbooks.Open Filename:= _
+        blndShtPath
+    
+'Paste the shortage qty value into the theory gallons cell
+    Cells.Find(What:="Theory Gallons", After:=ActiveCell, LookIn:=xlFormulas2 _
+        , LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+        MatchCase:=False, SearchFormat:=False).Activate
+    ActiveCell.Offset(1, 0).Range("A1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        
+'Set a variable so we can return to this regardless of filename
+    Dim blndSht As String
+    blndSht = ActiveWorkbook.Name
+
+'Return to blend sheet workbook
+    Windows(blndSht).Activate
+    Application.CutCopyMode = False
+
+End Sub
+
+
+Sub blndShtGen2wk()
+'///Assigned to the 2wk column on Blend These//////////////////////////////////////////////////////////////////////////////
+'///Opens the blend sheet workbook for the blend on the row you click. Inputs the 2wk qty into said blend sheet.///////////
+
+'String for current workbook name
+    Dim src As String
+    src = ActiveWorkbook.Name
+
+'Copy the value of the shortage qty cell
+    Selection.Copy
+    
+'Get the filepath + name of the appropriate blend sheet
+    Dim blndShtPath As String
+    blndShtPath = ActiveCell.Offset(0, -2).Value
+    Workbooks.Open Filename:= _
+        blndShtPath
+    
+'Paste the shortage qty value into the theory gallons cell
+    Cells.Find(What:="Theory Gallons", After:=ActiveCell, LookIn:=xlFormulas2 _
+        , LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+        MatchCase:=False, SearchFormat:=False).Activate
+    ActiveCell.Offset(1, 0).Range("A1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        
+'Set a variable so we can return to this regardless of filename
+    Dim blndSht As String
+    blndSht = ActiveWorkbook.Name
+
+'Return to blend sheet workbook
+    Windows(blndSht).Activate
+    Application.CutCopyMode = False
+
+End Sub
+
+
+Sub blndShtGen1wk()
+'///Assigned to the 1wk column on Blend These//////////////////////////////////////////////////////////////////////////////
+'///Opens the blend sheet workbook for the blend on the row you click. Inputs the 1wk qty into said blend sheet.///////////
+
+'String for current workbook name
+    Dim src As String
+    src = ActiveWorkbook.Name
+
+'Copy the value of the shortage qty cell
+    Selection.Copy
+    
+'Get the filepath + name of the appropriate blend sheet
+    Dim blndShtPath As String
+    blndShtPath = ActiveCell.Offset(0, -1).Value
+    Workbooks.Open Filename:= _
+        blndShtPath
+    
+'Paste the shortage qty value into the theory gallons cell
+    Cells.Find(What:="Theory Gallons", After:=ActiveCell, LookIn:=xlFormulas2 _
+        , LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+        MatchCase:=False, SearchFormat:=False).Activate
+    ActiveCell.Offset(1, 0).Range("A1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+        
+'Set a variable so we can return to this regardless of filename
+    Dim blndSht As String
+    blndSht = ActiveWorkbook.Name
+
+'Return to blend sheet workbook
+    Windows(blndSht).Activate
+    Application.CutCopyMode = False
+
+End Sub
+
+
 Sub LotNumGen()
 '///Linked to T:T on BlendThese////////////////////////////////////////////////////////////////////////////////////////////
 '///Opens Lot Number Generator.xlsx and fills in the blend desc////////////////////////////////////////////////////////////
@@ -6,16 +114,17 @@ Sub LotNumGen()
     Dim src As String
     src = ActiveWorkbook.Name
 
-'Array variable for the blend information
-    Dim blendInfo(2) As Variant
-    
+Call macrosOff
+
 'Copy blend qty
     ActiveCell.Offset(0, -2).Select
     Selection.Copy
+    
+Call macrosOn
 
 'Get filepath of Blenging Lont Ntumbner Grenerartror dot xlsx
     Dim path As String
-    path = "C:\OD\Kinpak, Inc\Blending - Documents\01 Spreadsheet Tools\Blending Lot Number Generator\LotNumGenerator-Prod\Blending Lot Number Generator"
+    path = "C:\OD\Kinpak, Inc\Blending - Documents\01 Spreadsheet Tools\Blending Lot Number Generator\Prod\Blending Lot Number Generator"
     Workbooks.Open path
     Sheets(1).Activate
 
@@ -36,4 +145,6 @@ Sub LotNumGen()
             :=False, Transpose:=False
 
 End Sub
+
+
 

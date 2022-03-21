@@ -1,0 +1,24 @@
+Function MAXBLEND(blendPN)
+    Dim maxBlendQty As Double
+    
+    maxBlendQty = 100000
+    Dim i As Integer
+'    For i = 1 To 1300
+'        If Range("A" & i) = blendPN Then
+'            If Range("J" & i).Value < maxBlendQty Then
+'                maxBlendQty = Range("J" & i).Value
+'            End If
+'        End If
+'    Next i
+    i = 859
+    If Range("A" & i) = blendPN Then
+       If Range("J" & i).Value < maxBlendQty Then
+           maxBlendQty = Range("J" & i).Value
+       End If
+    End If
+        'Blendlist [i] =
+        
+    MAXBLEND = maxBlendQty
+'    blendPN
+    
+End Function

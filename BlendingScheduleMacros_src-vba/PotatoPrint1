@@ -1,0 +1,182 @@
+Sub potatoPrinterBlendCounts()
+'///Assigned to printer icon on BlendCounts sheet//////////////////////////////////////////////////////////////////////////
+'///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
+
+    'Create and set source name variables
+    Dim currentTableName As String
+    Range("B3").Select
+    currentTableName = Selection.ListObject.Name
+    currentSheetName = ActiveSheet.Name
+    
+    Select Case currentTableName
+    Case "blendCounts_query"
+        Range("C:D").EntireColumn.Hidden = True
+    Case "chemCounts_query"
+        With ActiveSheet.PageSetup
+            .FitToPagesWide = 1
+            .Zoom = 80
+            .FitToPagesTall = 1
+            .Orientation = xlPortrait
+        End With
+        
+    End Select
+    
+    Range("G:M").EntireColumn.Hidden = True
+    
+    'turn off macros
+    Call macrosOff
+
+    'select visible data body
+    ActiveSheet.ListObjects(currentTableName).Range.SpecialCells(xlCellTypeVisible).Select
+    
+    'set row height for table then insert row, write in reason for counting
+    ActiveSheet.ListObjects(currentTableName).Range.RowHeight = 32
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    Range("A1").Select
+    ActiveCell.FormulaR1C1 = "Reason for counting: if our info is wrong, we will run short on blends"
+    'Insert row, write in counts and Now()
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    Range("A1:A2").Select
+    ActiveCell.FormulaR1C1 = "Count for " & Now() & " - In Order of Production Needs"
+    With Selection.Font
+        .Name = "Calibri"
+        .Size = 16
+        .Strikethrough = False
+        .Superscript = False
+        .Subscript = False
+        .OutlineFont = False
+        .Shadow = False
+        .Underline = xlUnderlineStyleNone
+        .ThemeColor = xlThemeColorLight1
+        .TintAndShade = 0
+        .ThemeFont = xlThemeFontMinor
+    End With
+    
+    'Make it print all columns on one sheet and then print the sheet
+    Application.PrintCommunication = False
+    With Sheets(ActiveSheet.Name).PageSetup
+        .FitToPagesWide = 1
+        .FitToPagesTall = False
+    End With
+    Application.PrintCommunication = True
+    copyNumber = InputBox("Number of Printed Copies")
+    If Not copyNumber = "" Then
+    ActiveSheet.PrintOut Copies:=copyNumber
+    End If
+    
+    'delete the inserted rows
+    Rows("1:2").Select
+    Selection.Delete Shift:=xlUp
+     
+    'show rows again and change row height back
+    Range("C:D,G:M").EntireColumn.Hidden = False
+    ActiveSheet.ListObjects(currentTableName).Range.RowHeight = 15
+    Range("A1").Select
+    
+    'turn on macros
+    Call macrosOn
+    
+End Sub
+
+
+Sub printBlendThese()
+'///Assigned to printer on BlendThese//////////////////////////////////////////////////////////////////////////////////////
+'///Formats the sheet and then prints it///////////////////////////////////////////////////////////////////////////////////
+
+    'hide columns
+    Range("A:D,L:P,T:AA").Select
+    Selection.EntireColumn.Hidden = True
+    
+    'off with the Macros
+    Call macrosOff
+
+    'input box
+    copyNumber = InputBox("Number of Printed Copies")
+    If Not copyNumber = "" Then
+        
+        'insert row
+        Rows("1:1").Select
+        Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+        Range("B1").Select
+        ActiveCell.FormulaR1C1 = "Printed " & Now()
+        With Selection.Font
+            .Name = "Calibri"
+            .Size = 24
+            .Strikethrough = False
+            .Superscript = False
+            .Subscript = False
+            .OutlineFont = False
+            .Shadow = False
+            .Underline = xlUnderlineStyleNone
+            .ThemeColor = xlThemeColorLight1
+            .TintAndShade = 0
+            .ThemeFont = xlThemeFontMinor
+        End With
+    
+        'print selection
+        With ActiveSheet.PageSetup
+            .Orientation = xlLandscape
+            .Zoom = 150
+            .FitToPagesWide = 1
+            .FitToPagesTall = 1
+        End With
+        ActiveWindow.SelectedSheets.PrintOut Copies:=1, Collate:=True, _
+            IgnorePrintAreas:=False
+        
+        'delete row
+        Rows("1:1").Select
+        Selection.Delete Shift:=xlUp
+        
+    End If
+   
+   
+    'show columns again
+    Range("A:D,L:P,T:AA").Select
+    Selection.EntireColumn.Hidden = False
+    Range("E1").Select
+
+    'turn on macros
+    Call macrosOn
+    
+End Sub
+
+
+Sub BlendTheseCounts()
+'///Assigned to arrow icon on BlendThese sheet/////////////////////////////////////////////////////////////////////////////
+'///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
+
+    'off with the Macros
+    Call macrosOff
+    
+    'Filter for items that have not been checked since last change in inventory
+    ActiveSheet.ListObjects("blendThese_TABLE").Range.AutoFilter Field _
+        :=9, Criteria1:=RGB(146, 208, 80), Operator:=xlFilterCellColor
+    
+        ActiveSheet.ListObjects("blendThese_TABLE").Range.RowHeight = 32
+
+    'Hide unneccessary columns
+    Columns("D:V").Select
+    Selection.EntireColumn.Hidden = True
+    
+    'select visible data body
+    ActiveSheet.ListObjects("blendThese_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("blendThese_TABLE").DataBodyRange.Select
+    
+    'print selection
+    copyNumber = InputBox("Number of Printed Copies")
+    If Not copyNumber = "" Then
+        ActiveSheet.PageSetup.Orientation = xlPortrait
+        ActiveWindow.SelectedSheets.PrintOut Copies:=copyNumber
+    End If
+    
+    'clear color filter, reset row height, then unhide the columns
+    ActiveSheet.ListObjects("blendThese_TABLE").Range.AutoFilter Field:=9
+    ActiveSheet.ListObjects("blendThese_TABLE").Range.RowHeight = 15
+    Columns("D:V").Select
+    Selection.EntireColumn.Hidden = False
+        
+End Sub
+
+

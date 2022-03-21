@@ -1,0 +1,23 @@
+Private Sub Worksheet_Change(ByVal target As Range)
+
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then 'Timestamp when I enter a count for a blend
+        If Not Intersect(target, Range("$F2:$F200")) Is Nothing Then
+            If target.Row > 1 Then
+               target.Offset(0, 1) = Now()
+            End If
+        End If
+    End If
+
+End Sub
+
+Private Sub Worksheet_SelectionChange(ByVal target As Range)
+
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then 'Pull up the blend report interface
+        If Selection.Count = 1 Then
+            If Not Intersect(target, Range("$A1:$A200")) Is Nothing Then
+                BlendReportSelekta.Show
+            End If
+        End If
+    End If
+     
+End Sub

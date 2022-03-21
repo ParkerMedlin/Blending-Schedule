@@ -32,8 +32,8 @@ Sub refreshAndFilter()
         
 'Re-filter chemShortages
         Sheets("ChemShortages").Select
-        ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=6
-        ActiveSheet.ListObjects("chemShortages_TABLE").Range.AutoFilter Field:=6, _
+        ActiveSheet.ListObjects("bom_Chem_query").Range.AutoFilter Field:=6
+        ActiveSheet.ListObjects("bom_Chem_query").Range.AutoFilter Field:=6, _
         Criteria1:="<0", Operator:=xlAnd
         
      Else
@@ -85,3 +85,30 @@ Sub refreshOH()
     
 End Sub
 
+
+Sub refreshIssueSheet()
+'///Used in the IssueSheetLooper macro to restore the rows removed when filtering duplicates///////////////////////////////
+'///refreshes then re-hides the appropriate columns////////////////////////////////////////////////////////////////////////
+
+    Range("A2").Select
+    Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
+
+    Range("J:O").EntireColumn.Hidden = True
+
+End Sub
+
+
+Sub refreshNFilter2()
+'///Assigned to arrow on the IssueSheetTable sheet/////////////////////////////////////////////////////////////////////////
+'///Refreshes the schedule and then closes/reopens so that IssueSheetTable will actually display correctly/////////////////
+
+    Call refreshAndFilter
+    
+'Open the blend issue sheet and refresh it
+    ChDir "G:\Blending\02 Blending Issue Sheet"
+    Workbooks.Open Filename:= _
+        "G:\Blending\02 Blending Issue Sheet\NOT the Blending Issue Sheet.xlsb"
+    ActiveWorkbook.RefreshAll
+ 
+
+End Sub

@@ -1,0 +1,19 @@
+Private Sub Worksheet_SelectionChange(ByVal target As Range)
+
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then 'Pull up the blend report interface
+        If Selection.Count = 1 Then
+            If Not Intersect(target, Range("$A$2:$A$75")) Is Nothing Then
+                BlendReportSelekta.Show
+            End If
+        End If
+    End If
+    
+    If InStr(1, (Range("AA1").Value), "On") > 0 Then 'Make a lot number entry for the blend in that row
+        If Selection.Count = 1 Then
+            If Not Intersect(target, Range("$R$2:$R$75")) Is Nothing Then
+                Call LotNumGen
+            End If
+        End If
+    End If
+        
+End Sub

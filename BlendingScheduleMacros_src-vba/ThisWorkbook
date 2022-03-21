@@ -1,3 +1,9 @@
-Sub Workbook_BeforeClose(Cancel As Boolean)
-    ActiveWorkbook.Sheets("ChemShortages").Activate
+Option Explicit
+
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    Call selectChemShortages
+End Sub
+
+Private Sub Workbook_Open()
+    Call selectChemShortages
 End Sub

@@ -1,0 +1,26 @@
+#If VBA7 Then
+    Private Declare PtrSafe Sub keybd_event Lib "user32.dll" (ByVal bVk As Byte, ByVal bScan As Byte, _
+                                                              ByVal dwFlags As LongPtr, ByVal dwExtraInfo As LongPtr)
+    Private Declare PtrSafe Function GetKeyboardState Lib "user32.dll" (ByVal lpKeyState As LongPtr) As Boolean
+#Else
+    Private Declare Sub keybd_event Lib "user32.dll" (ByVal bVk As Byte, ByVal bScan As Byte, _
+                                                      ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
+    Private Declare Function GetKeyboardState Lib "user32.dll" (ByVal lpKeyState As Long) As Boolean
+#End If
+
+Private Const KEYEVENTF_EXTENDEDKEY As Long = &H1
+Private Const KEYEVENTF_KEYUP As Long = &H2
+Private Const VK_NUMLOCK As Byte = &H90
+Private Const NumLockScanCode As Byte = &H45
+
+Sub ToggleNumlock(enabled As Boolean)
+    Dim keystate(255) As Byte
+    'Test current keyboard state.
+    GetKeyboardState (VarPtr(keystate(0)))
+    If (Not keystate(VK_NUMLOCK) And enabled) Or (keystate(VK_NUMLOCK) And Not enabled) Then
+        'Send a keydown
+        keybd_event VK_NUMLOCK, NumLockScanCode, KEYEVENTF_EXTENDEDKEY, 0&
+        'Send a keyup
+        keybd_event VK_NUMLOCK, NumLockScanCode, KEYEVENTF_EXTENDEDKEY Or KEYEVENTF_KEYUP, 0&
+    End If
+End Sub

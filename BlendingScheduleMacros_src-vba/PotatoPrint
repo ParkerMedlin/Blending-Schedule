@@ -1,30 +1,30 @@
 
-Sub potatoPrinterBlendCounts()
+Sub potatoPrinterCheckOut()
 '///Assigned to printer icon on CheckOutCounts sheet///////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
 
-    'hide rows
-    Range("C:D,G:L").Select
+'hide rows
+    Range("A:D,I:I,N:O,P:AA").Select
     Selection.EntireColumn.Hidden = True
     
-    'turn off macros
+'turn off macros
     Call macrosOff
 
-    'select visible data body
-    ActiveSheet.ListObjects("blendCounts_query").Range.SpecialCells(xlCellTypeVisible).Select
-    ActiveSheet.ListObjects("blendCounts_query").DataBodyRange.Select
+'select visible data body
+    ActiveSheet.ListObjects("CheckOutCounts_query").Range.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("CheckOutCounts_query").DataBodyRange.Select
     
-    'set row height
-    ActiveSheet.ListObjects("blendCounts_query").Range.RowHeight = 32
+'set row height
+    ActiveSheet.ListObjects("CheckOutCounts_query").Range.RowHeight = 32
     
-    'Insert row, write in reason for counting
+'Insert row, write in reason for counting
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-    Range("A1").Select
+    Range("E1").Select
     ActiveCell.FormulaR1C1 = "Reason for counting: if our info is wrong, we will run short on blends"
     With Selection.Font
         .Name = "Calibri"
-        .Size = 16
+        .Size = 24
         .Strikethrough = False
         .Superscript = False
         .Subscript = False
@@ -36,14 +36,14 @@ Sub potatoPrinterBlendCounts()
         .ThemeFont = xlThemeFontMinor
     End With
 
-    'Insert row, write in Count and Now()
+'Insert row, write in Count and Now()
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
-    Range("A1").Select
+    Range("E1").Select
     ActiveCell.FormulaR1C1 = "Count for " & Now() & " - In Order of Production Needs"
     With Selection.Font
         .Name = "Calibri"
-        .Size = 16
+        .Size = 24
         .Strikethrough = False
         .Superscript = False
         .Subscript = False
@@ -55,23 +55,23 @@ Sub potatoPrinterBlendCounts()
         .ThemeFont = xlThemeFontMinor
     End With
     
-    'print selection
+'print selection
     copyNumber = InputBox("Number of Printed Copies")
     If Not copyNumber = "" Then
         ActiveWindow.SelectedSheets.PrintOut Copies:=copyNumber
     End If
     
-    'delete the inserted rows
+'delete the inserted rows
     Rows("1:2").Select
     Selection.Delete Shift:=xlUp
      
-    'show rows again and change row height back
-    Range("C:D,G:L").Select
+'show rows again and change row height back
+    Range("A:D,I:I,N:O,P:AA").Select
     Selection.EntireColumn.Hidden = False
-    ActiveSheet.ListObjects("blendCounts_query").Range.RowHeight = 21
+    ActiveSheet.ListObjects("CheckOutCounts_query").Range.RowHeight = 21
     Range("A1").Select
     
-    'turn on macros
+'turn on macros
     Call macrosOn
     
 End Sub
@@ -81,18 +81,18 @@ Sub printBlendThese()
 '///Assigned to printer on BlendThese//////////////////////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it///////////////////////////////////////////////////////////////////////////////////
 
-    'hide columns
+'hide columns
     Range("A:D,L:P,T:AA").Select
     Selection.EntireColumn.Hidden = True
     
-    'off with the Macros
+'off with the Macros
     Call macrosOff
 
-    'input box
+'input box
     copyNumber = InputBox("Number of Printed Copies")
     If Not copyNumber = "" Then
         
-        'insert row
+'insert row
         Rows("1:1").Select
         Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
         Range("B1").Select
@@ -111,7 +111,7 @@ Sub printBlendThese()
             .ThemeFont = xlThemeFontMinor
         End With
     
-        'print selection
+'print selection
         Application.PrintCommunication = False
         With ActiveSheet.PageSetup
             .PrintTitleRows = ""
@@ -221,44 +221,118 @@ Sub printBlendThese()
         ActiveWindow.SelectedSheets.PrintOut Copies:=1, Collate:=True, _
             IgnorePrintAreas:=False
         
-        'delete row
+'delete row
         Rows("1:1").Select
         Selection.Delete Shift:=xlUp
         
     End If
    
    
-    'show columns again
+'show columns again
     Range("A:D,L:P,T:AA").Select
     Selection.EntireColumn.Hidden = False
     Range("E1").Select
 
-    'turn on macros
+'turn on macros
     Call macrosOn
     
 End Sub
 
 
+Sub printIssueSchedule()
+'///Assigned to printer on IssueSheetTable/////////////////////////////////////////////////////////////////////////////////
+'///Formats the sheet and then prints it///////////////////////////////////////////////////////////////////////////////////
+    
+'declare int
+    Dim i As Integer
+    Dim numRows As Integer
+    
+'find numRows
+    ActiveSheet.ListObjects("issueSheetTable").DataBodyRange.SpecialCells(xlCellTypeVisible).Select
+    numRows = Selection.Rows.Count + 1
+
+'insert row
+    Rows("1:1").Select
+    Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    Range("B1").Select
+    ActiveCell.FormulaR1C1 = "Runs for " & Now() + 1
+    With Selection.Font
+        .Name = "Calibri"
+        .Size = 24
+        .Strikethrough = False
+        .Superscript = False
+        .Subscript = False
+        .OutlineFont = False
+        .Shadow = False
+        .Underline = xlUnderlineStyleNone
+        .ThemeColor = xlThemeColorLight1
+        .TintAndShade = 0
+        .ThemeFont = xlThemeFontMinor
+    End With
+
+'hide columns and select appropriate thing
+    Range("H:AB").Select
+    Selection.EntireColumn.Hidden = True
+    Range("A1:G" & numRows).Select
+
+'Print it 6 times
+    For i = 1 To 6
+    Selection.PrintOut
+    Next i
+
+'delete row
+    Rows("1:1").Select
+    Selection.Delete Shift:=xlUp
+
+'Unhide things as needed
+    Range("H:I").Select
+    Selection.EntireColumn.Hidden = False
+
+    
+End Sub
+
+Sub printIssueSheets()
+'///Assigned to the print button on the PrintButton worksheet of each line's workbook//////////////////////////////////////
+'///Delete all unused sheets from the workbook/////////////////////////////////////////////////////////////////////////////
+
+'Turn off the warnings so that sheets can be deleted without interruption
+Application.DisplayAlerts = False
+
+'Start at the beginning
+Worksheets(1).Activate
+
+'Loop through all sheets and delete the ones that start with "Blending Issue Sheet"
+Dim i As Integer
+For i = 1 To (ActiveWorkbook.Worksheets.Count - 1)
+ActiveSheet.PrintOut
+Sheets(i + 1).Select
+Next i
+
+'Turn sheet delete warnings back on
+Application.DisplayAlerts = True
+
+End Sub
+
 Sub potatoPrinterChemstoCheck()
 '///Assigned to printer icon on chemstocheck sheet/////////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
 
-    'hide rows
+'hide rows
     Range("A:B").Select
     Selection.EntireColumn.Hidden = True
     
-    'select visible data body
-    ActiveSheet.ListObjects("pickSheet_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
-    ActiveSheet.ListObjects("pickSheet_TABLE").DataBodyRange.Select
+'select visible data body
+    ActiveSheet.ListObjects("bom_ChemsToCheck_query").Range.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("bom_ChemsToCheck_query").DataBodyRange.Select
     
-    'set row height
-    ActiveSheet.ListObjects("pickSheet_TABLE").Range.RowHeight = 32
+'set row height
+    ActiveSheet.ListObjects("bom_ChemsToCheck_query").Range.RowHeight = 32
     
-    'remove duplicates
-    ActiveSheet.Range("pickSheet_TABLE[#All]").RemoveDuplicates Columns:=3 _
+'remove duplicates
+    ActiveSheet.Range("bom_ChemsToCheck_query[#All]").RemoveDuplicates Columns:=3 _
         , Header:=xlYes
     
-    'Insert row, write in Count and Now()
+'Insert row, write in Count and Now()
     Rows("1:1").Select
     Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
     Range("C1").Select
@@ -277,23 +351,23 @@ Sub potatoPrinterChemstoCheck()
         .ThemeFont = xlThemeFontMinor
     End With
     
-    'print selection
+'print selection
     copyNumber = InputBox("Number of Printed Copies")
     If Not copyNumber = "" Then
         ActiveWindow.SelectedSheets.PrintOut Copies:=copyNumber
     End If
     
-    'delete the inserted date row
+'delete the inserted date row
     Rows("1:1").Select
     Selection.Delete Shift:=xlUp
           
-    'show rows again and change row height back
+'show rows again and change row height back
     Range("A:B").Select
     Selection.EntireColumn.Hidden = False
-    ActiveSheet.ListObjects("pickSheet_TABLE").Range.RowHeight = 21
+    ActiveSheet.ListObjects("bom_ChemsToCheck_query").Range.RowHeight = 21
     Range("A1").Select
     
-    'refresh to restore order
+'refresh to restore order
     Range("C2").Select
     Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
    
@@ -303,16 +377,16 @@ Sub BlendTheseCounts()
 '///Assigned to arrow icon on BlendThese sheet/////////////////////////////////////////////////////////////////////////////
 '///Formats the sheet and then prints it for distribution to inventory crew////////////////////////////////////////////////
 
-    'off with the Macros
+'off with the Macros
     Call macrosOff
     
-    'Filter for items that have not been checked since last change in inventory
-    ActiveSheet.ListObjects("blendThese_TABLE").Range.AutoFilter Field _
+'Filter for items that have not been checked since last change in inventory
+    ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.AutoFilter Field _
         :=9, Criteria1:=RGB(146, 208, 80), Operator:=xlFilterCellColor
     
-        ActiveSheet.ListObjects("blendThese_TABLE").Range.RowHeight = 32
+        ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.RowHeight = 32
 
-    'Hide unneccessary columns
+'Hide unneccessary columns
     Columns("A:D").Select
     Selection.EntireColumn.Hidden = True
     Columns("H:U").Select
@@ -322,29 +396,30 @@ Sub BlendTheseCounts()
     Columns("W:AA").Select
     Selection.EntireColumn.Hidden = True
     
-    'select visible data body
-    ActiveSheet.ListObjects("blendThese_TABLE").Range.SpecialCells(xlCellTypeVisible).Select
-    ActiveSheet.ListObjects("blendThese_TABLE").DataBodyRange.Select
     
-    'print selection
+    
+'set row height
+
+    
+'select visible data body
+    ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.SpecialCells(xlCellTypeVisible).Select
+    ActiveSheet.ListObjects("timeTable_BlendThese_query").DataBodyRange.Select
+    
+'print selection
     copyNumber = InputBox("Number of Printed Copies")
     If Not copyNumber = "" Then
         ActiveSheet.PageSetup.Orientation = xlPortrait
         ActiveWindow.SelectedSheets.PrintOut Copies:=copyNumber
     End If
     
-    'clear color filter, reset row height, then unhide the columns
-    ActiveSheet.ListObjects("blendThese_TABLE").Range.AutoFilter Field:=9
-    ActiveSheet.ListObjects("blendThese_TABLE").Range.RowHeight = 15
+'clear color filter, reset row height, then unhide the columns
+    ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.AutoFilter Field:=9
+    ActiveSheet.ListObjects("timeTable_BlendThese_query").Range.RowHeight = 15
     Columns("A:D").Select
     Selection.EntireColumn.Hidden = False
-    Columns("H:AA").Select
+    Columns("H:U").Select
     Selection.EntireColumn.Hidden = False
     Columns("V:V").Select
     Selection.EntireColumn.Hidden = True
-    Columns("T:T").Select
-    Selection.EntireColumn.Hidden = True
     
 End Sub
-
-
