@@ -1,0 +1,64 @@
+PDLINE
+let
+    Source = Excel.Workbook(Web.Contents("https://adminkinpak.sharepoint.com/sites/PDTN/Shared%20Documents/Production%20Schedule/Starbrite%20KPK%20production%20schedule.xlsb"), null, true),
+    PDLine1 = Table.FirstN(Source{[Name="PDLine"]}[Data],500),
+    #"Removed Other Columns" = Table.SelectColumns(PDLine1,{"Column3", "Column4", "Column5", "Column7", "Column8", "Column11"}),
+    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Column3] <> null and [Column3] <> "on deck - 32oz - sprayers" and [Column3] <> "P/N")),
+    #"Added Custom" = Table.AddColumn(#"Filtered Rows", "Custom", each "PDLine")
+in
+    #"Added Custom"
+OIL
+let
+    Source = Excel.Workbook(Web.Contents("https://adminkinpak.sharepoint.com/sites/PDTN/Shared%20Documents/Production%20Schedule/Starbrite%20KPK%20production%20schedule.xlsb"), null, true),
+    Oil1 = Table.FirstN(Source{[Name="Oil"]}[Data],500),
+    #"Removed Other Columns" = Table.SelectColumns(Oil1,{"Column3", "Column4", "Column5", "Column8", "Column7", "Column11"}),
+    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Column3] = "026003TA1" or [Column3] = "028510" or [Column3] = "028703")),
+    #"Added Custom" = Table.AddColumn(#"Filtered Rows", "Custom", each "Oil")
+in
+    #"Added Custom"
+KITSLINE
+let
+    Source = Excel.Workbook(Web.Contents("https://adminkinpak.sharepoint.com/sites/PDTN/Shared%20Documents/Production%20Schedule/Starbrite%20KPK%20production%20schedule.xlsb"), null, true),
+    KitsLine1 = Table.FirstN(Source{[Name="KitsLine"]}[Data],500),
+    #"Removed Other Columns" = Table.SelectColumns(KitsLine1,{"Column3", "Column4", "Column5", "Column7", "Column8", "Column11"}),
+    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Column3] <> null and [Column3] <> "Horix Kit Table" and [Column3] <> "Inline Kit Table " and [Column3] <> "LET Kit Table" and [Column3] <> "LET Kit Table #2" and [Column3] <> "P/N" and [Column3] <> "PD Line Kit Table " and [Column3] <> "pk")),
+    #"Added Custom" = Table.AddColumn(#"Filtered Rows", "Custom", each "KitsLine")
+in
+    #"Added Custom"
+
+JBLINE
+let
+    Source = Excel.Workbook(Web.Contents("https://adminkinpak.sharepoint.com/sites/PDTN/Shared%20Documents/Production%20Schedule/Starbrite%20KPK%20production%20schedule.xlsb"), null, true),
+    JBLine1 = Table.FirstN(Source{[Name="JBLine"]}[Data],500),
+    #"Removed Other Columns" = Table.SelectColumns(JBLine1,{"Column3", "Column4", "Column5", "Column7", "Column8", "Column11"}),
+    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each [Column3] <> null and [Column3] <> "P/N" and not Text.Contains([Column3], "on deck")),
+    #"Added Custom" = Table.AddColumn(#"Filtered Rows", "Custom", each "JBLine")
+in
+    #"Added Custom"
+
+Blister
+let
+    Source = Excel.Workbook(Web.Contents("https://adminkinpak.sharepoint.com/sites/PDTN/Shared%20Documents/Production%20Schedule/Starbrite%20KPK%20production%20schedule.xlsb"), null, true),
+    Blister1 = Table.FirstN(Source{[Name="Blister"]}[Data],500),
+    #"Removed Other Columns" = Table.SelectColumns(Blister1,{"Column3", "Column4", "Column5", "Column7", "Column8", "Column11"}),
+    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Column3] <> null and [Column3] <> "P/N")),
+    #"Added Custom" = Table.AddColumn(#"Filtered Rows", "Custom", each "Blister")
+in
+    #"Added Custom"
+
+INLINE
+let
+    Source = Excel.Workbook(Web.Contents("https://adminkinpak.sharepoint.com/sites/PDTN/Shared%20Documents/Production%20Schedule/Starbrite%20KPK%20production%20schedule.xlsb"), null, true),
+    Inline1 = Table.FirstN(Source{[Name="Inline"]}[Data],500),
+    #"Removed Other Columns" = Table.SelectColumns(Inline1,{"Column3", "Column4", "Column5", "Column7", "Column8", "Column11"}),
+    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Column3] <> null and [Column3] <> " " and [Column3] <> "P/N")),
+    #"Added Custom" = Table.AddColumn(#"Filtered Rows", "Custom", each "Inline")
+in
+    #"Added Custom"
+
+Append1
+let
+    Source = Table.Combine({Inline, PDLine, JBLine, Oil, Blister, KitsLine}),
+    #"Renamed Columns" = Table.RenameColumns(Source,{{"Column3", "masterPN"}, {"Column4", "masterPO"}, {"Column5", "masterDescription"}, {"Column7", "masterUOM"}, {"Column8", "masterQty"}, {"Column11", "masterRuntime"}, {"Custom", "masterLine"}})
+in
+    #"Renamed Columns"

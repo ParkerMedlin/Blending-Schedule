@@ -1,5 +1,19 @@
 # Update Notes
 
+### 3-21-2022
+ - Rebuilt the whole spreadsheet on top of a new query which pulls directly from sharepoint instead of using onedrive
+
+### 2-28-2022
+ - Added individual refresh buttons for every table bc refreshAll is stupid
+
+### 2-22-2022
+ - Updated refresh sub so that it no longer depends on MacrosOn, but that still didn't stop the timestamp sub from triggering during refresh
+ - Updated the countPrint sub so it manually fits the print job all columns to one page
+
+### 2-8-2022
+ - Added a module so the workbook_open and workbook_close actions would actually work. Select ChemShortages when the workbook is closed or opened.
+ - Got rid of MacrosOn/MacrosOff cells. Moved those subs to power button icon.  
+
 ### 2-7-2022
  - Standardized the count sheet print sub so that it works on both chemCounts and blendCounts
  - Moved more of the icons over to the chemCounts sheet w/ supporting documentation
